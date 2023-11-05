@@ -21,6 +21,9 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "FreeRTOS.h"
+#include "task.h"
+#include "OS_Task.h"
 
 /* USER CODE END Includes */
 
@@ -63,6 +66,10 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
+    BaseType_t status;
+
+    TaskHandle_t Task1_Kernel_Pointer;
+    TaskHandle_t Task2_Kernel_Pointer;
 
   /* USER CODE END 1 */
 
@@ -72,6 +79,8 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
+  
+
 
   /* USER CODE END Init */
 
@@ -79,6 +88,31 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
+    /* Create task 1 */
+    status = xTaskCreate(   Task_1_Handler,
+                            "Task_1",
+                            400,
+                            "Hello World from Task 1",
+                            2,
+                            &Task1_Kernel_Pointer
+                          );
+
+    /* Check xTaskCreate status */
+    configASSERT(status == pdPASS);
+
+    /* Create task 2 */
+    status = xTaskCreate(   Task_2_Handler,
+                            "Task_2",
+                            400,
+                            "Hello World from Task 2",
+                            2,
+                            &Task2_Kernel_Pointer
+                          );
+
+    /* Check xTaskCreate status */
+    configASSERT(status == pdPASS);
+
+
 
   /* USER CODE END SysInit */
 
