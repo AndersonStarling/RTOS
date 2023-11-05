@@ -89,6 +89,13 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
+
+  /* USER CODE END SysInit */
+
+  /* Initialize all configured peripherals */
+  MX_GPIO_Init();
+  /* USER CODE BEGIN 2 */
+
     /* Create task 1 */
     status = xTaskCreate(   Task_1_Handler,
                             "Task_1",
@@ -113,13 +120,6 @@ int main(void)
     /* Check xTaskCreate status */
     configASSERT(status == pdPASS);
 
-
-
-  /* USER CODE END SysInit */
-
-  /* Initialize all configured peripherals */
-  MX_GPIO_Init();
-  /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
 
