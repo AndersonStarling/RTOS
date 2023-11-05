@@ -6,9 +6,3 @@ void Task_2_Handler(void * Task_Param);
 
 #endif /* OS_TASK_H */
 
-
-
-
-
-
-
