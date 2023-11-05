@@ -120,6 +120,8 @@ int main(void)
     /* Check xTaskCreate status */
     configASSERT(status == pdPASS);
 
+    vTaskStartScheduler();
+
 
   /* USER CODE END 2 */
 
