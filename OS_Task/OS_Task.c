@@ -9,6 +9,7 @@ void Task_1_Handler(void * Task_Param)
     for(;;)
     {
         printf("%s\n", (char *)Task_Param);
+        taskYIELD();
     };
 }
 
@@ -18,6 +19,7 @@ void Task_2_Handler(void * Task_Param)
     for(;;)
     {
         printf("%s\n", (char *)Task_Param);
+        taskYIELD();
     };
 }
 
