@@ -24,6 +24,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "OS_Task.h"
+#include "DWT_Counter.h"
 
 /* USER CODE END Includes */
 
@@ -95,6 +96,11 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
+
+    SEGGER_SYSVIEW_Conf();
+    SEGGER_SYSVIEW_Start();
+
+    DWT_Enable();
 
     /* Create task 1 */
     status = xTaskCreate(   Task_1_Handler,

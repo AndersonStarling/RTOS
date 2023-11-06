@@ -2,6 +2,8 @@
 #include "ITM_Print.h"
 
 /* Override _write in syscalls.c to print string through SWD */
+
+#if 0
 int _write(int file, char *ptr, int len)
 {
   (void)file;
@@ -14,6 +16,7 @@ int _write(int file, char *ptr, int len)
 
   return len;
 }
+#endif
 
 
 
