@@ -70,8 +70,8 @@ int main(void)
   /* USER CODE BEGIN 1 */
     BaseType_t status;
 
-    TaskHandle_t Task1_Kernel_Pointer;
-    TaskHandle_t Task2_Kernel_Pointer;
+    TaskHandle_t Led_1_Handler_Kernel_Pointer;
+    TaskHandle_t Led_2_Handler_Kernel_Pointer;
 
   /* USER CODE END 1 */
 
@@ -104,24 +104,24 @@ int main(void)
 //    SEGGER_SYSVIEW_Start();
 
     /* Create task 1 */
-    status = xTaskCreate(   Task_1_Handler,
+    status = xTaskCreate(   Led_1_Handler,
                             "Task_1",
                             400,
-                            "Hello World from Task 1",
+                            "Led_1 toggle",
                             2,
-                            &Task1_Kernel_Pointer
+                            &Led_1_Handler_Kernel_Pointer
                           );
 
     /* Check xTaskCreate status */
     configASSERT(status == pdPASS);
 
     /* Create task 2 */
-    status = xTaskCreate(   Task_2_Handler,
+    status = xTaskCreate(   Led_2_Handler,
                             "Task_2",
                             400,
-                            "Hello World from Task 2",
+                            "Led_2 toggle",
                             2,
-                            &Task2_Kernel_Pointer
+                            &Led_2_Handler_Kernel_Pointer
                           );
 
     /* Check xTaskCreate status */
