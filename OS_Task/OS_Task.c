@@ -10,22 +10,22 @@ void Led_1_Handler(void * Task_Param)
     /* Infinitive loop */
     for(;;)
     {
-        HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_10);
         SEGGER_SYSVIEW_PrintfTarget("Task_1");
-        HAL_Delay(1000);
-        taskYIELD();
+        HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_10);
+        vTaskDelay(pdMS_TO_TICKS(1000));
+        // taskYIELD();
     };
-    }
+}
 
 void Led_2_Handler(void * Task_Param)
 {
     /* Infinitive loop */
     for(;;)
     {
-        HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_12);
         SEGGER_SYSVIEW_PrintfTarget("Task_2");
-        HAL_Delay(800);
-        taskYIELD();
+        HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_12);
+        vTaskDelay(pdMS_TO_TICKS(800));
+        // taskYIELD();
     };
 }
 
@@ -35,10 +35,10 @@ void Led_3_Handler(void * Task_Param)
     /* Infinitive loop */
     for(;;)
     {
-        HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
         SEGGER_SYSVIEW_PrintfTarget("Task_3");
-        HAL_Delay(400);
-        taskYIELD();
+        HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+        vTaskDelay(pdMS_TO_TICKS(400));
+        // taskYIELD();
     };
 }
 

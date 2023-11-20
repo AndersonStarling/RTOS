@@ -97,7 +97,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
     DWT_Enable();
-    SEGGER_UART_init(500000);
+    SEGGER_UART_init(250000);
 
     SEGGER_SYSVIEW_Conf();
 
