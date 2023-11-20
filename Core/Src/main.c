@@ -72,6 +72,7 @@ int main(void)
 
     TaskHandle_t Led_1_Handler_Kernel_Pointer;
     TaskHandle_t Led_2_Handler_Kernel_Pointer;
+    TaskHandle_t Led_3_Handler_Kernel_Pointer;
 
   /* USER CODE END 1 */
 
@@ -82,8 +83,6 @@ int main(void)
 
   /* USER CODE BEGIN Init */
   
-
-
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -98,10 +97,9 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
     DWT_Enable();
-    SEGGER_UART_init(500000);
+    SEGGER_UART_init(250000);
 
     SEGGER_SYSVIEW_Conf();
-//    SEGGER_SYSVIEW_Start();
 
     /* Create task 1 */
     status = xTaskCreate(   Led_1_Handler,
@@ -122,6 +120,18 @@ int main(void)
                             "Led_2 toggle",
                             2,
                             &Led_2_Handler_Kernel_Pointer
+                          );
+
+    /* Check xTaskCreate status */
+    configASSERT(status == pdPASS);
+
+    /* Create task 3 */
+    status = xTaskCreate(   Led_3_Handler,
+                            "Task_3",
+                            400,
+                            "Led_3 toggle",
+                            2,
+                            &Led_3_Handler_Kernel_Pointer
                           );
 
     /* Check xTaskCreate status */
@@ -205,7 +215,7 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13|GPIO_PIN_10|GPIO_PIN_12, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13|GPIO_PIN_10|GPIO_PIN_12, GPIO_PIN_SET);
 
   /*Configure GPIO pins : PC13 PC10 PC12 */
   GPIO_InitStruct.Pin = GPIO_PIN_13|GPIO_PIN_10|GPIO_PIN_12;
