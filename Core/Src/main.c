@@ -46,7 +46,11 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+TaskHandle_t Led_1_Handler_Kernel_Pointer;
+TaskHandle_t Led_2_Handler_Kernel_Pointer;
+TaskHandle_t Led_3_Handler_Kernel_Pointer;
+TaskHandle_t User_Button_Handler_Kernel_Pointer;
+TaskHandle_t Task_Shutdown_Handler_Kernel_Pointer;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -69,10 +73,6 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
     BaseType_t status;
-
-    TaskHandle_t Led_1_Handler_Kernel_Pointer;
-    TaskHandle_t Led_2_Handler_Kernel_Pointer;
-    TaskHandle_t Led_3_Handler_Kernel_Pointer;
 
   /* USER CODE END 1 */
 
@@ -132,6 +132,30 @@ int main(void)
                             "Led_3 toggle",
                             2,
                             &Led_3_Handler_Kernel_Pointer
+                          );
+
+    /* Check xTaskCreate status */
+    configASSERT(status == pdPASS);
+
+    /* Create task 4 */
+    status = xTaskCreate(   User_Button_Handler,
+                            "Task_4",
+                            400,
+                            "User Button",
+                            2,
+                            &User_Button_Handler_Kernel_Pointer
+                          );
+
+    /* Check xTaskCreate status */
+    configASSERT(status == pdPASS);
+
+    /* Create task 5 */
+    status = xTaskCreate(   Task_Shutdown_Handler,
+                            "Task_5",
+                            400,
+                            "Shutdown Task",
+                            2,
+                            &Task_Shutdown_Handler_Kernel_Pointer
                           );
 
     /* Check xTaskCreate status */
@@ -213,16 +237,33 @@ static void MX_GPIO_Init(void)
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13|GPIO_PIN_10|GPIO_PIN_12, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_10|GPIO_PIN_12, GPIO_PIN_SET);
 
-  /*Configure GPIO pins : PC13 PC10 PC12 */
-  GPIO_InitStruct.Pin = GPIO_PIN_13|GPIO_PIN_10|GPIO_PIN_12;
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_7, GPIO_PIN_SET);
+
+  /*Configure GPIO pin : PC13 */
+  GPIO_InitStruct.Pin = GPIO_PIN_13;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PC10 PC12 */
+  GPIO_InitStruct.Pin = GPIO_PIN_10|GPIO_PIN_12;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PB7 */
+  GPIO_InitStruct.Pin = GPIO_PIN_7;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */
