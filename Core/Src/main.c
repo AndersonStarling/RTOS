@@ -49,7 +49,6 @@
 TaskHandle_t Led_1_Handler_Kernel_Pointer;
 TaskHandle_t Led_2_Handler_Kernel_Pointer;
 TaskHandle_t Led_3_Handler_Kernel_Pointer;
-TaskHandle_t User_Button_Handler_Kernel_Pointer;
 TaskHandle_t Task_Shutdown_Handler_Kernel_Pointer;
 /* USER CODE END PV */
 
@@ -138,20 +137,8 @@ int main(void)
     configASSERT(status == pdPASS);
 
     /* Create task 4 */
-    status = xTaskCreate(   User_Button_Handler,
-                            "Task_4",
-                            400,
-                            "User Button",
-                            2,
-                            &User_Button_Handler_Kernel_Pointer
-                          );
-
-    /* Check xTaskCreate status */
-    configASSERT(status == pdPASS);
-
-    /* Create task 5 */
     status = xTaskCreate(   Task_Shutdown_Handler,
-                            "Task_5",
+                            "Task_4",
                             400,
                             "Shutdown Task",
                             2,
@@ -247,7 +234,7 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin : PC13 */
   GPIO_InitStruct.Pin = GPIO_PIN_13;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
@@ -264,6 +251,10 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 6, 0);
+  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */

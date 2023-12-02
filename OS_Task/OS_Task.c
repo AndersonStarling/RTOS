@@ -8,7 +8,6 @@
 extern TaskHandle_t Led_1_Handler_Kernel_Pointer;
 extern TaskHandle_t Led_2_Handler_Kernel_Pointer;
 extern TaskHandle_t Led_3_Handler_Kernel_Pointer;
-extern TaskHandle_t User_Button_Handler_Kernel_Pointer;
 extern TaskHandle_t Task_Shutdown_Handler_Kernel_Pointer;
 
 void Led_1_Handler(void * Task_Param)
@@ -105,24 +104,6 @@ void Led_3_Handler(void * Task_Param)
             }
         }
     };
-}
-
-void User_Button_Handler(void * Task_Param)
-{
-    GPIO_PinState Button_Status;
-    TickType_t xLastWakeTime;
-
-    xLastWakeTime = xTaskGetTickCount();
-
-    for(;;)
-    {
-        SEGGER_SYSVIEW_PrintfTarget("Task_4_User_Button");
-        xTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(1));
-        Button_Status = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13);
-        xTaskNotifyIndexed(Led_1_Handler_Kernel_Pointer, 0, Button_Status, eSetValueWithOverwrite);
-        xTaskNotifyIndexed(Led_2_Handler_Kernel_Pointer, 0, Button_Status, eSetValueWithOverwrite);
-        xTaskNotifyIndexed(Led_3_Handler_Kernel_Pointer, 0, Button_Status, eSetValueWithOverwrite);
-    }
 }
 
 void Task_Shutdown_Handler(void * Task_Param)
