@@ -13,6 +13,8 @@ void EXTI15_10_IRQHandler()
     BaseType_t Status;
     uint32_t EXTI_Pending_Interrupt = 0;
 
+    traceISR_ENTER();
+
     Status = xTaskNotifyIndexedFromISR( Task_Shutdown_Handler_Kernel_Pointer, 
                                         1, 
                                         Task_ID, 
@@ -24,6 +26,8 @@ void EXTI15_10_IRQHandler()
 
     EXTI_Pending_Interrupt = EXTI->PR;
     EXTI->PR = EXTI_Pending_Interrupt;
+
+    traceISR_EXIT();
 }
 
 
