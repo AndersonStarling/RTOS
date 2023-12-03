@@ -22,24 +22,7 @@ void Led_1_Handler(void * Task_Param)
         SEGGER_SYSVIEW_PrintfTarget("Task_1");
         HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_10);
         vTaskDelay(pdMS_TO_TICKS(1000));
-
-        Status = xTaskNotifyWaitIndexed(0, 0x0, 0xffffffff, &Button_Status, pdMS_TO_TICKS(OS_TASK_TIME_OUT));
-
-        /* A event came */
-        if(Status == pdTRUE)
-        {
-            switch(Button_Status)
-            {
-                case 0:
-                    Status = xTaskNotifyIndexed(Task_Shutdown_Handler_Kernel_Pointer, 1, Task_ID, eSetValueWithOverwrite);
-                    break;
-                case 1:
-                	break;
-                default:
-                	break;
-            }
-        }
-    };
+    }
 }
 
 void Led_2_Handler(void * Task_Param)
@@ -54,24 +37,7 @@ void Led_2_Handler(void * Task_Param)
         SEGGER_SYSVIEW_PrintfTarget("Task_2");
         HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_12);
         vTaskDelay(pdMS_TO_TICKS(800));
-
-        Status = xTaskNotifyWaitIndexed(0, 0x0, 0xffffffff, &Button_Status, pdMS_TO_TICKS(OS_TASK_TIME_OUT));
-
-        /* A event came */
-        if(Status == pdTRUE)
-        {
-            switch(Button_Status)
-            {
-                case 0:
-                    Status = xTaskNotifyIndexed(Task_Shutdown_Handler_Kernel_Pointer, 1, Task_ID, eSetValueWithOverwrite);
-                    break;
-                case 1:
-                	break;
-                default:
-                	break;
-            }
-        }
-    };
+    }
 }
 
 void Led_3_Handler(void * Task_Param)
@@ -86,24 +52,7 @@ void Led_3_Handler(void * Task_Param)
         SEGGER_SYSVIEW_PrintfTarget("Task_3");
         HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_7);
         vTaskDelay(pdMS_TO_TICKS(400));
-
-        Status = xTaskNotifyWaitIndexed(0, 0x0, 0xffffffff, &Button_Status, pdMS_TO_TICKS(OS_TASK_TIME_OUT));
-
-        /* A event came */
-        if(Status == pdTRUE)
-        {
-            switch(Button_Status)
-            {
-                case 0:
-                    Status = xTaskNotifyIndexed(Task_Shutdown_Handler_Kernel_Pointer, 1, Task_ID, eSetValueWithOverwrite);
-                    break;
-                case 1:
-                	break;
-                default:
-                	break;
-            }
-        }
-    };
+    }
 }
 
 void Task_Shutdown_Handler(void * Task_Param)
