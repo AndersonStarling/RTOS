@@ -13,6 +13,10 @@
 #define PORT_LED_2   GPIOB
 #define PIN_LED_2    GPIO_PIN_7
 
+void LED_Mode_0(void);
+void LED_Mode_1(void);
+void LED_Mode_2(void);
+
 #endif /* LED_MODE_H */
 
 

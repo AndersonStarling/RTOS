@@ -7,6 +7,7 @@
 
 void Led_Select_Mode_Task(void * Task_Param)
 {
+    uint32_t Led_Mode = 0;
 
     SEGGER_SYSVIEW_PrintfTarget("Led_Select_Mode_Task");
 
@@ -17,11 +18,11 @@ void Led_Select_Mode_Task(void * Task_Param)
             vTaskDelay(pdMS_TO_TICKS(400));
             break;
         case 1:
-            LED_Mode_0();
+            LED_Mode_1();
             vTaskDelay(pdMS_TO_TICKS(400));
             break;
         case 2:
-            LED_Mode_0();
+            LED_Mode_2();
             vTaskDelay(pdMS_TO_TICKS(400));
             break;
         default:

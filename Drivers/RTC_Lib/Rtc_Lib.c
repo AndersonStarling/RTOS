@@ -1,8 +1,7 @@
 #include "Rtc_Lib.h"
-#include "rtc.h"
 
 /* Print Character */
-static void App_Print_Character(uint8_t * Print_Character)
+static void App_Print_Character(uint8_t Print_Character)
 {
 
 }
@@ -11,6 +10,7 @@ static void App_Print_Character(uint8_t * Print_Character)
 void App_RTC_Init(void)
 {
     /* Init RTC */
+    HAL_RTC_MspInit(&hrtc);
     MX_RTC_Init();
 }
 
@@ -19,14 +19,18 @@ void App_RTC_Print_Time(void)
 {
     RTC_TimeTypeDef sTime;
 
-    HAL_RTC_GetTime(&hrtc, &sTime, RTC_HOURFORMAT12_PM);
+    if(HAL_OK == HAL_RTC_WaitForSynchro(&hrtc))
+    {
+        HAL_RTC_GetTime(&hrtc, &sTime, RTC_HOURFORMAT12_PM);
 
-    /* Print time according to hh:mm:ss */
-    App_Print_Character(sTime.Hours);
-    App_Print_Character(':');
-    App_Print_Character(sTime.Minutes);
-    App_Print_Character(':');
-    App_Print_Character(sTime.Seconds);
+        /* Print time according to hh:mm:ss */
+        App_Print_Character(sTime.Hours);
+        App_Print_Character(':');
+        App_Print_Character(sTime.Minutes);
+        App_Print_Character(':');
+        App_Print_Character(sTime.Seconds);
+    }
+
 }
 
 /* Print the date */
@@ -47,7 +51,7 @@ void App_RTC_Print_Date(void)
 /* Set the time */
 void App_Set_Time(RTC_TimeTypeDef *sTime)
 {
-    RTC_TimeTypeDef sDate_local;
+    RTC_TimeTypeDef sTime_local;
 
     /* Use as default value */
     HAL_RTC_GetTime(&hrtc, &sTime_local, RTC_HOURFORMAT12_PM);
