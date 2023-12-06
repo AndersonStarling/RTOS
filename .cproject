@@ -64,6 +64,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/RTOS/ThirdParty/SEGGER/Rec}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/RTOS/Drivers/LED_Mode}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/RTOS/Drivers/RTC_Lib}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/RTOS/Drivers/Print_Lib}&quot;"/>
 								</option>
 								<inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c.1868692401" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c"/>
 							</tool>

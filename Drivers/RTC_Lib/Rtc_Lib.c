@@ -1,18 +1,5 @@
 #include "Rtc_Lib.h"
-
-/* Print Character */
-static void App_Print_Character(uint8_t Print_Character)
-{
-
-}
-
-/* Init RTC timer */
-void App_RTC_Init(void)
-{
-    /* Init RTC */
-    HAL_RTC_MspInit(&hrtc);
-    MX_RTC_Init();
-}
+#include "Print_Lib.h"
 
 /* Print the time */
 void App_RTC_Print_Time(void)
