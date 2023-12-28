@@ -1,22 +1,29 @@
 #include "Rtc_Lib.h"
 #include "Print_Lib.h"
+#include "Convert_Lib.h"
 
 /* Print the time */
 void App_RTC_Print_Time(void)
 {
     RTC_TimeTypeDef sTime;
+    uint8_t Hours = 0;
+    uint8_t Min = 0;
+    uint8_t Sec = 0;
 
-    if(HAL_OK == HAL_RTC_WaitForSynchro(&hrtc))
-    {
-        HAL_RTC_GetTime(&hrtc, &sTime, RTC_HOURFORMAT12_PM);
+    while(HAL_OK != HAL_RTC_WaitForSynchro(&hrtc));
 
-        /* Print time according to hh:mm:ss */
-        App_Print_Character(sTime.Hours);
-        App_Print_Character(':');
-        App_Print_Character(sTime.Minutes);
-        App_Print_Character(':');
-        App_Print_Character(sTime.Seconds);
-    }
+    HAL_RTC_GetTime(&hrtc, &sTime, RTC_HOURFORMAT12_PM);
+
+    Hours = App_Convert_Hex_To_Char(sTime.Hours);
+    Min = App_Convert_Hex_To_Char(sTime.Minutes);
+    Sec = App_Convert_Hex_To_Char(sTime.Seconds);
+
+    /* Print time according to hh:mm:ss */
+    App_Print_Character(Hours);
+    App_Print_Character(':');
+    App_Print_Character(Min);
+    App_Print_Character(':');
+    App_Print_Character(Sec);
 
 }
 
@@ -24,6 +31,8 @@ void App_RTC_Print_Time(void)
 void App_RTC_Print_Date(void)
 {
     RTC_DateTypeDef sDate;
+
+    while(HAL_OK == HAL_RTC_WaitForSynchro(&hrtc));
 
     HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BCD);
 

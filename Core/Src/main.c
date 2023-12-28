@@ -101,6 +101,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
     App_RTC_Print_Time();
+    App_RTC_Print_Date();
     // DWT_Enable();
     // SEGGER_UART_init(250000);
 
