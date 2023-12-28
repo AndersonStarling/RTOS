@@ -53,7 +53,7 @@
 TaskHandle_t Led_1_Handler_Kernel_Pointer;
 TaskHandle_t Led_2_Handler_Kernel_Pointer;
 TaskHandle_t Led_3_Handler_Kernel_Pointer;
-TaskHandle_t Task_Shutdown_Handler_Kernel_Pointer;
+TaskHandle_t Task_Suspend_And_Resume_Kernel_Pointer;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -100,60 +100,58 @@ int main(void)
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
 
-    App_RTC_Print_Time();
-    App_RTC_Print_Date();
-    // DWT_Enable();
-    // SEGGER_UART_init(250000);
+    DWT_Enable();
+    SEGGER_UART_init(250000);
 
-    // SEGGER_SYSVIEW_Conf();
+    SEGGER_SYSVIEW_Conf();
 
-    // /* Create task 1 */
-    // status = xTaskCreate(   Led_1_Handler,
-    //                         "Task_1",
-    //                         400,
-    //                         "Led_1 toggle",
-    //                         2,
-    //                         &Led_1_Handler_Kernel_Pointer
-    //                       );
+    /* Create task 1 */
+    status = xTaskCreate(   Led_1_Handler,
+                            "Task_1",
+                            400,
+                            "Led_1 toggle",
+                            2,
+                            &Led_1_Handler_Kernel_Pointer
+                          );
 
-    // /* Check xTaskCreate status */
-    // configASSERT(status == pdPASS);
+    /* Check xTaskCreate status */
+    configASSERT(status == pdPASS);
 
-    // /* Create task 2 */
-    // status = xTaskCreate(   Led_2_Handler,
-    //                         "Task_2",
-    //                         400,
-    //                         "Led_2 toggle",
-    //                         2,
-    //                         &Led_2_Handler_Kernel_Pointer
-    //                       );
+    /* Create task 2 */
+    status = xTaskCreate(   Led_2_Handler,
+                            "Task_2",
+                            400,
+                            "Led_2 toggle",
+                            2,
+                            &Led_2_Handler_Kernel_Pointer
+                          );
 
-    // /* Check xTaskCreate status */
-    // configASSERT(status == pdPASS);
+    /* Check xTaskCreate status */
+    configASSERT(status == pdPASS);
 
-    // /* Create task 3 */
-    // status = xTaskCreate(   Led_3_Handler,
-    //                         "Task_3",
-    //                         400,
-    //                         "Led_3 toggle",
-    //                         2,
-    //                         &Led_3_Handler_Kernel_Pointer
-    //                       );
+    /* Create task 3 */
+    status = xTaskCreate(   Led_3_Handler,
+                            "Task_3",
+                            400,
+                            "Led_3 toggle",
+                            2,
+                            &Led_3_Handler_Kernel_Pointer
+                          );
 
-    // /* Check xTaskCreate status */
-    // configASSERT(status == pdPASS);
+    /* Check xTaskCreate status */
+    configASSERT(status == pdPASS);
 
-    // /* Create task 4 */
-    // status = xTaskCreate(   Task_Shutdown_Handler,
-    //                         "Task_4",
-    //                         400,
-    //                         "Shutdown Task",
-    //                         2,
-    //                         &Task_Shutdown_Handler_Kernel_Pointer
-    //                       );
+    /* Create task 4 */
+    status = xTaskCreate(   Task_Resume_And_Suspend,
+                            "Task_4",
+                            400,
+                            "Resume and Suspend Task",
+                            2,
+                            &Task_Suspend_And_Resume_Kernel_Pointer
+                          );
 
-    // /* Check xTaskCreate status */
-    // configASSERT(status == pdPASS);
+    /* Check xTaskCreate status */
+    configASSERT(status == pdPASS);
 
     // vTaskStartScheduler();
 
