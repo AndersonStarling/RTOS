@@ -165,6 +165,8 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
+    App_RTC_Print_Time();
+    App_RTC_Print_Date();
 
     /* USER CODE BEGIN 3 */
   }

@@ -6,42 +6,70 @@
 void App_RTC_Print_Time(void)
 {
     RTC_TimeTypeDef sTime;
-    uint8_t Hours = 0;
-    uint8_t Min = 0;
-    uint8_t Sec = 0;
+    uint8_t Hours_High_Byte = 0;
+    uint8_t Hours_Low_Byte = 0;
+    uint8_t Min_High_Byte = 0;
+    uint8_t Min_Low_Byte = 0;
+    uint8_t Sec_High_Byte = 0;
+    uint8_t Sec_Low_Byte = 0;
 
     while(HAL_OK != HAL_RTC_WaitForSynchro(&hrtc));
 
     HAL_RTC_GetTime(&hrtc, &sTime, RTC_HOURFORMAT12_PM);
 
-    Hours = App_Convert_Hex_To_Char(sTime.Hours);
-    Min = App_Convert_Hex_To_Char(sTime.Minutes);
-    Sec = App_Convert_Hex_To_Char(sTime.Seconds);
+    Hours_High_Byte = APP_CONVERT_HIGH_BYTE_TO_CHAR(sTime.Hours);
+    Hours_Low_Byte =  APP_CONVERT_LOW_BYTE_TO_CHAR(sTime.Hours);
+
+    Min_High_Byte = APP_CONVERT_HIGH_BYTE_TO_CHAR(sTime.Minutes);
+    Min_Low_Byte =  APP_CONVERT_LOW_BYTE_TO_CHAR(sTime.Minutes);
+
+    Sec_High_Byte = APP_CONVERT_HIGH_BYTE_TO_CHAR(sTime.Seconds);
+    Sec_Low_Byte = APP_CONVERT_LOW_BYTE_TO_CHAR(sTime.Seconds);
 
     /* Print time according to hh:mm:ss */
-    App_Print_Character(Hours);
+    App_Print_Character(Hours_High_Byte);
+    App_Print_Character(Hours_Low_Byte);
     App_Print_Character(':');
-    App_Print_Character(Min);
+    App_Print_Character(Min_High_Byte);
+    App_Print_Character(Min_Low_Byte);
     App_Print_Character(':');
-    App_Print_Character(Sec);
-
+    App_Print_Character(Sec_High_Byte);
+    App_Print_Character(Sec_Low_Byte);
 }
 
 /* Print the date */
 void App_RTC_Print_Date(void)
 {
     RTC_DateTypeDef sDate;
+    uint8_t Date_High_Byte = 0;
+    uint8_t Date_Low_Byte = 0;
+    uint8_t Month_High_Byte = 0;
+    uint8_t Month_Low_Byte = 0;
+    uint8_t Year_High_Byte = 0;
+    uint8_t Year_Low_Byte = 0;
 
-    while(HAL_OK == HAL_RTC_WaitForSynchro(&hrtc));
+    while(HAL_OK != HAL_RTC_WaitForSynchro(&hrtc));
 
     HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BCD);
 
-    /* Print time according to hh:mm:ss */
-    App_Print_Character(sDate.Date);
+    Date_High_Byte = APP_CONVERT_HIGH_BYTE_TO_CHAR(sDate.Date);
+    Date_Low_Byte =  APP_CONVERT_LOW_BYTE_TO_CHAR(sDate.Date);
+
+    Month_High_Byte = APP_CONVERT_HIGH_BYTE_TO_CHAR(sDate.Month);
+    Month_Low_Byte =  APP_CONVERT_LOW_BYTE_TO_CHAR(sDate.Month);
+
+    Year_High_Byte = APP_CONVERT_HIGH_BYTE_TO_CHAR(sDate.Year);
+    Year_Low_Byte = APP_CONVERT_LOW_BYTE_TO_CHAR(sDate.Year);
+
+    /* Print time according to dd:mm:yy */
+    App_Print_Character(Date_High_Byte);
+    App_Print_Character(Date_Low_Byte);
     App_Print_Character('/');
-    App_Print_Character(sDate.Month);
+    App_Print_Character(Month_High_Byte);
+    App_Print_Character(Month_Low_Byte);
     App_Print_Character('/');
-    App_Print_Character(sDate.Year);
+    App_Print_Character(Year_High_Byte);
+    App_Print_Character(Year_Low_Byte);
 }
 
 /* Set the time */

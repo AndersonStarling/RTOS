@@ -4,7 +4,9 @@
 #include <stdio.h>
 #include <stdint.h>
 
-uint8_t App_Convert_Hex_To_Char(uint8_t Hex_Value);
+#define APP_CONVERT_HIGH_BYTE_TO_CHAR(Hex_Value) (((Hex_Value) >> 4) & 0x0f) + '0'
+
+#define APP_CONVERT_LOW_BYTE_TO_CHAR(Hex_Value) ((Hex_Value) & 0x0f) + '0'
 
 #endif /* CONVERT_LIB_H */
 
