@@ -16,6 +16,7 @@
 void LED_Mode_0(void);
 void LED_Mode_1(void);
 void LED_Mode_2(void);
+void LED_Mode_Off(void);
 
 #endif /* LED_MODE_H */
 
