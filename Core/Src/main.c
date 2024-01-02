@@ -105,8 +105,6 @@ int main(void)
 
     SEGGER_SYSVIEW_Conf();
 
-    OS_Task_Init();
-
     /* Create task 1 */
     status = xTaskCreate(   Led_1_Handler,
                             "Task_1",
@@ -148,15 +146,16 @@ int main(void)
                             "Task_4",
                             400,
                             "Resume and Suspend Task",
-                            4,
+                            2,
                             &Task_Suspend_And_Resume_Kernel_Pointer
                           );
 
     /* Check xTaskCreate status */
     configASSERT(status == pdPASS);
 
-    vTaskStartScheduler();
+    OS_Task_Init();
 
+    vTaskStartScheduler();
 
   /* USER CODE END 2 */
 
