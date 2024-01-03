@@ -33,8 +33,22 @@ void OS_Task_Init(void)
 
 void Led_1_Handler(void * Task_Param)
 {
+    TaskHandle_t Curent_Task;
+    uint8_t Task_Index = 0;
+
 	for(;;)
 	{
+	    Curent_Task = xTaskGetCurrentTaskHandle();
+
+		for(Task_Index = 0; Task_Index < 3; Task_Index ++)
+	    {
+			/* Suspend all another task, excep this task */
+			if(Curent_Task != Task_Kernel_Pointer_Array[Task_Index])
+			{
+	            vTaskSuspend(Task_Kernel_Pointer_Array[Task_Index]);
+			}
+	    }
+
 	    LED_Mode_Off();
 	    LED_Mode_0();
 	    vTaskDelay(pdMS_TO_TICKS(400));
@@ -43,8 +57,22 @@ void Led_1_Handler(void * Task_Param)
 
 void Led_2_Handler(void * Task_Param)
 {
+	TaskHandle_t Curent_Task;
+    uint8_t Task_Index = 0;
+
 	for(;;)
 	{
+	    Curent_Task = xTaskGetCurrentTaskHandle();
+
+		for(Task_Index = 0; Task_Index < 3; Task_Index ++)
+	    {
+			/* Suspend all another task, excep this task */
+			if(Curent_Task != Task_Kernel_Pointer_Array[Task_Index])
+			{
+	            vTaskSuspend(Task_Kernel_Pointer_Array[Task_Index]);
+			}
+	    }
+
 	    LED_Mode_Off();
 	    LED_Mode_1();
 	    vTaskDelay(pdMS_TO_TICKS(400));
@@ -53,8 +81,22 @@ void Led_2_Handler(void * Task_Param)
 
 void Led_3_Handler(void * Task_Param)
 {
+	TaskHandle_t Curent_Task;
+    uint8_t Task_Index = 0;
+
 	for(;;)
 	{
+	    Curent_Task = xTaskGetCurrentTaskHandle();
+
+		for(Task_Index = 0; Task_Index < 3; Task_Index ++)
+	    {
+			/* Suspend all another task, excep this task */
+			if(Curent_Task != Task_Kernel_Pointer_Array[Task_Index])
+			{
+	            vTaskSuspend(Task_Kernel_Pointer_Array[Task_Index]);
+			}
+	    }
+
 	    LED_Mode_Off();
 	    LED_Mode_2();
 	    vTaskDelay(pdMS_TO_TICKS(400));
