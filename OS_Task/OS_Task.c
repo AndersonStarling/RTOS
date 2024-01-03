@@ -4,6 +4,9 @@
 #include <stdio.h>
 #include "stm32f4xx_hal.h"
 #include "Led_Mode.h"
+#include "usart.h"
+
+#define UART_IN_USE huart1
 
 extern TaskHandle_t Led_1_Handler_Kernel_Pointer;
 extern TaskHandle_t Led_2_Handler_Kernel_Pointer;
@@ -11,9 +14,9 @@ extern TaskHandle_t Led_3_Handler_Kernel_Pointer;
 extern TaskHandle_t Task_Suspend_And_Resume_Kernel_Pointer;
 
 TaskHandle_t Task_Kernel_Pointer_Array[4] = { 0 };
+uint8_t Rx_Buffer[2] = {0};
                                 
 uint8_t Task_Index_Shall_Resume = 0;
-uint8_t Task_Index_Previous = 0;
 
 void OS_Task_Init(void)
 {
@@ -29,6 +32,8 @@ void OS_Task_Init(void)
     {
         vTaskSuspend(Task_Kernel_Pointer_Array[Task_Index]);
     }
+
+	HAL_UART_Receive_IT(&UART_IN_USE, &Rx_Buffer[0], 1);
 }
 
 void Led_1_Handler(void * Task_Param)
@@ -102,6 +107,20 @@ void Led_3_Handler(void * Task_Param)
 	    vTaskDelay(pdMS_TO_TICKS(400));
 	}
 }
+
+/* USART receive call back */
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+    /* Re-Enable RXNE interrupt */
+	HAL_UART_Receive_IT(&UART_IN_USE, &Rx_Buffer[0], 1);
+
+	Task_Index_Shall_Resume ++;
+	if(Task_Index_Shall_Resume > 3)
+	{
+		Task_Index_Shall_Resume = 0;
+	}
+}
+
 
 void Task_Resume_And_Suspend(void * Task_Param)
 {

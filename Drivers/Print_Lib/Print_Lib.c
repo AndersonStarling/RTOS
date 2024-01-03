@@ -37,4 +37,3 @@ bool App_Print_Character(uint8_t Print_Character)
 
 
 
-
