@@ -17,6 +17,7 @@ TaskHandle_t Task_Kernel_Pointer_Array[4] = { 0 };
 uint8_t Rx_Buffer[2] = {0};
                                 
 uint8_t Task_Index_Shall_Resume = 0;
+uint8_t Task_Off_Led = 0;
 
 void OS_Task_Init(void)
 {
@@ -54,7 +55,13 @@ void Led_1_Handler(void * Task_Param)
 			}
 	    }
 
-	    LED_Mode_Off();
+    	if(Task_Off_Led != 0)
+    	{
+    		LED_Mode_Off();
+    	}
+
+    	Task_Off_Led = 0;
+
 	    LED_Mode_0();
 	    vTaskDelay(pdMS_TO_TICKS(400));
 	}
@@ -78,7 +85,13 @@ void Led_2_Handler(void * Task_Param)
 			}
 	    }
 
-	    LED_Mode_Off();
+    	if(Task_Off_Led != 0)
+    	{
+    		LED_Mode_Off();
+    	}
+
+    	Task_Off_Led = 0;
+
 	    LED_Mode_1();
 	    vTaskDelay(pdMS_TO_TICKS(400));
 	}
@@ -102,7 +115,13 @@ void Led_3_Handler(void * Task_Param)
 			}
 	    }
 
-	    LED_Mode_Off();
+    	if(Task_Off_Led != 0)
+    	{
+    		LED_Mode_Off();
+    	}
+
+    	Task_Off_Led = 0;
+
 	    LED_Mode_2();
 	    vTaskDelay(pdMS_TO_TICKS(400));
 	}
@@ -114,8 +133,9 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     /* Re-Enable RXNE interrupt */
 	HAL_UART_Receive_IT(&UART_IN_USE, &Rx_Buffer[0], 1);
 
+	Task_Off_Led ++;
 	Task_Index_Shall_Resume ++;
-	if(Task_Index_Shall_Resume > 3)
+	if(Task_Index_Shall_Resume > 2)
 	{
 		Task_Index_Shall_Resume = 0;
 	}

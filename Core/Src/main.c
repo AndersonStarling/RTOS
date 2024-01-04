@@ -29,6 +29,7 @@
 #include "OS_Task.h"
 #include "DWT_Counter.h"
 #include "Rtc_Lib.h"
+#include "Led_Mode.h"
 
 /* USER CODE END Includes */
 
@@ -152,6 +153,8 @@ int main(void)
 
     /* Check xTaskCreate status */
     configASSERT(status == pdPASS);
+
+    LED_Mode_Off();
 
     OS_Task_Init();
 
