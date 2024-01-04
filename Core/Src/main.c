@@ -55,6 +55,7 @@ TaskHandle_t Led_1_Handler_Kernel_Pointer;
 TaskHandle_t Led_2_Handler_Kernel_Pointer;
 TaskHandle_t Led_3_Handler_Kernel_Pointer;
 TaskHandle_t Task_Suspend_And_Resume_Kernel_Pointer;
+TaskHandle_t Task_Print_Kernel_Pointer;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -154,11 +155,23 @@ int main(void)
     /* Check xTaskCreate status */
     configASSERT(status == pdPASS);
 
+    /* Create task 5 */
+    status = xTaskCreate(   Task_Print_Information,
+                            "Task_5",
+                            400,
+                            "Task Print",
+                            2,
+                            &Task_Print_Kernel_Pointer
+                          );
+
+    /* Check xTaskCreate status */
+    configASSERT(status == pdPASS);
+
     LED_Mode_Off();
 
     OS_Task_Init();
 
-    vTaskStartScheduler();
+    // vTaskStartScheduler();
 
   /* USER CODE END 2 */
 
@@ -169,6 +182,22 @@ int main(void)
     /* USER CODE END WHILE */
 //    App_RTC_Print_Time();
 //    App_RTC_Print_Date();
+
+//    App_Print_String((uint8_t *)"------- RTC and Led application v1.0 -------", strlen("------- RTC and Led application v1.0 -------"));
+//		App_Print_String((uint8_t *)"\n", strlen("\n"));
+//
+//        /* Print Date */
+//		App_Print_String((uint8_t *)"Date: ", strlen("Date: "));
+//		App_RTC_Print_Date();
+//		App_Print_String((uint8_t *)"\n", strlen("\n"));
+//
+//		/* Print Time */
+//		App_Print_String((uint8_t *)"Time: ", strlen("Time: "));
+//		App_RTC_Print_Time();
+//		App_Print_String((uint8_t *)"\n", strlen("\n"));
+
+		App_RTC_Print_Time();
+		App_RTC_Print_Date();
 
     /* USER CODE BEGIN 3 */
   }

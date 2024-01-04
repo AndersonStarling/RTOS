@@ -24,6 +24,16 @@ bool App_Print_Character(uint8_t Print_Character)
     return RetVal;
 }
 
+void App_Print_String(uint8_t * String, uint32_t String_Len)
+{
+    uint32_t Index = 0;
+
+    for(Index = 0; Index < String_Len; Index ++)
+    {
+        App_Print_Character(String[Index]);
+    }
+}
+
 
 
 

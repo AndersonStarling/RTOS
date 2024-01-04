@@ -5,6 +5,9 @@
 #include "stm32f4xx_hal.h"
 #include "Led_Mode.h"
 #include "usart.h"
+#include <string.h>
+#include "Rtc_Lib.h"
+#include "Print_Lib.h"
 
 #define UART_IN_USE huart1
 
@@ -151,6 +154,27 @@ void Task_Resume_And_Suspend(void * Task_Param)
         /* Resume only one task from UART message */
         vTaskResume(Task_Kernel_Pointer_Array[Task_Index_Shall_Resume]);
     }
+}
+
+void Task_Print_Information(void * Task_Param)
+{
+	for(;;)
+	{
+		/* Print program content */
+        App_Print_String((uint8_t *)"------- RTC and Led application v1.0 -------", strlen("------- RTC and Led application v1.0 -------"));
+		App_Print_String((uint8_t *)"\n", strlen("\n"));
+
+        /* Print Date */
+		App_Print_String((uint8_t *)"Date: ", strlen("Date: "));
+		App_RTC_Print_Date();
+		App_Print_String((uint8_t *)"\n", strlen("\n"));
+
+		/* Print Time */
+		App_Print_String((uint8_t *)"Time: ", strlen("Time: "));
+		App_RTC_Print_Time();
+		App_Print_String((uint8_t *)"\n", strlen("\n"));
+
+	}
 }
 
 
