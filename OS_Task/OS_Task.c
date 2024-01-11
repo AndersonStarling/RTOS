@@ -137,18 +137,26 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	HAL_UART_Receive_IT(&UART_IN_USE, &Rx_Buffer[0], 1);
 
 	Task_Off_Led ++;
-	Task_Index_Shall_Resume ++;
-	if(Task_Index_Shall_Resume > 2)
+
+	switch(Rx_Buffer[0])
 	{
-		Task_Index_Shall_Resume = 0;
+	    case '0':
+	    	Task_Index_Shall_Resume = 0;
+	    	break;
+	    case '1':
+	    	Task_Index_Shall_Resume = 1;
+	    	break;
+	    case '2':
+	    	Task_Index_Shall_Resume = 2;
+	    	break;
+	    default:
+		    break;
 	}
 }
 
 
 void Task_Resume_And_Suspend(void * Task_Param)
 {
-    uint8_t Task_Index = 0;
-
     for(;;)
     {
         /* Resume only one task from UART message */
@@ -158,21 +166,50 @@ void Task_Resume_And_Suspend(void * Task_Param)
 
 void Task_Print_Information(void * Task_Param)
 {
+    uint8_t Task_Clear_Screen_Cmd[4] = {0x1B, 0x5B, 0x32, 0x4a};
+
 	for(;;)
 	{
+		/* Clear terminal screen */
+		App_Print_Character(Task_Clear_Screen_Cmd[0]);
+		App_Print_Character(Task_Clear_Screen_Cmd[1]);
+		App_Print_Character(Task_Clear_Screen_Cmd[2]);
+		App_Print_Character(Task_Clear_Screen_Cmd[3]);
+
 		/* Print program content */
-        App_Print_String((uint8_t *)"------- RTC and Led application v1.0 -------", strlen("------- RTC and Led application v1.0 -------"));
-		App_Print_String((uint8_t *)"\n", strlen("\n"));
+        App_Print_String((uint8_t *)"------- RTC and Led application v1.0 -------");
+		App_Print_Character(0x0a);
+		App_Print_Character(0x0d);
 
         /* Print Date */
-		App_Print_String((uint8_t *)"Date: ", strlen("Date: "));
+		App_Print_String((uint8_t *)"Date: ");
 		App_RTC_Print_Date();
-		App_Print_String((uint8_t *)"\n", strlen("\n"));
+		App_Print_Character(0x0a);
+		App_Print_Character(0x0d);
 
 		/* Print Time */
-		App_Print_String((uint8_t *)"Time: ", strlen("Time: "));
+		App_Print_String((uint8_t *)"Time: ");
 		App_RTC_Print_Time();
-		App_Print_String((uint8_t *)"\n", strlen("\n"));
+		App_Print_Character(0x0a);
+		App_Print_Character(0x0d);
+
+		App_Print_String((uint8_t *)"Led Mode ");
+		App_Print_Character(0x0a);
+		App_Print_Character(0x0d);
+
+		App_Print_String((uint8_t *)"0. Mode 0");
+		App_Print_Character(0x0a);
+		App_Print_Character(0x0d);
+
+		App_Print_String((uint8_t *)"1. Mode 1");
+		App_Print_Character(0x0a);
+		App_Print_Character(0x0d);
+
+		App_Print_String((uint8_t *)"2. Mode 2");
+		App_Print_Character(0x0a);
+		App_Print_Character(0x0d);
+
+		vTaskDelay(pdMS_TO_TICKS(800));
 
 	}
 }

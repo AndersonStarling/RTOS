@@ -171,7 +171,7 @@ int main(void)
 
     OS_Task_Init();
 
-    // vTaskStartScheduler();
+    vTaskStartScheduler();
 
   /* USER CODE END 2 */
 
@@ -196,8 +196,6 @@ int main(void)
 //		App_RTC_Print_Time();
 //		App_Print_String((uint8_t *)"\n", strlen("\n"));
 
-		App_RTC_Print_Time();
-		App_RTC_Print_Date();
 
     /* USER CODE BEGIN 3 */
   }
