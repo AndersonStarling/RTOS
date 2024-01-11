@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-bool App_Print_Character(uint8_t Print_Character);
+void App_Print_Character(uint8_t Print_Character);
 
 void App_Print_String(uint8_t * String, uint32_t String_Len);
 
