@@ -180,22 +180,6 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-//    App_RTC_Print_Time();
-//    App_RTC_Print_Date();
-
-//    App_Print_String((uint8_t *)"------- RTC and Led application v1.0 -------", strlen("------- RTC and Led application v1.0 -------"));
-//		App_Print_String((uint8_t *)"\n", strlen("\n"));
-//
-//        /* Print Date */
-//		App_Print_String((uint8_t *)"Date: ", strlen("Date: "));
-//		App_RTC_Print_Date();
-//		App_Print_String((uint8_t *)"\n", strlen("\n"));
-//
-//		/* Print Time */
-//		App_Print_String((uint8_t *)"Time: ", strlen("Time: "));
-//		App_RTC_Print_Time();
-//		App_Print_String((uint8_t *)"\n", strlen("\n"));
-
 
     /* USER CODE BEGIN 3 */
   }
