@@ -167,40 +167,40 @@ void HIF_UART_WaitForTxEnd(void) {
 *    (1) This is a high-prio interrupt so it may NOT use embOS functions
 *        However, this also means that embOS will never disable this interrupt
 */
-void USART2_IRQHandler(void);
-void USART2_IRQHandler(void) {
-  int UsartStatus;
-  uint8_t v;
-  int r;
-
-  UsartStatus = USART_SR;                              // Examine status register
-  if (UsartStatus & (1 << USART_RXNE)) {               // Data received?
-    v = USART_DR;                                      // Read data
-    if ((UsartStatus & USART_RX_ERROR_FLAGS) == 0) {   // Only process data if no error occurred
-      (void)v;                                         // Avoid warning in BTL
-      if (_cbOnRx) {
-        _cbOnRx(v);
-      }
-    }
-  }
-  if (UsartStatus & (1 << USART_TXE)) {                // Tx (data register) empty? => Send next character Note: Shift register may still hold a character that has not been sent yet.
-    //
-    // Under special circumstances, (old) BTL of Flasher does not wait until a complete string has been sent via UART,
-    // so there might be an TxE interrupt pending *before* the FW had a chance to set the callbacks accordingly which would result in a NULL-pointer call...
-    // Therefore, we need to check if the function pointer is valid.
-    //
-    if (_cbOnTx == NULL) {  // No callback set? => Nothing to do...
-      return;
-    }
-    r = _cbOnTx(&v);
-    if (r == 0) {                          // No more characters to send ?
-      USART_CR1 &= ~(1UL << USART_TXEIE);  // Disable further tx interrupts
-    } else {
-      USART_SR;      // Makes sure that "transmission complete" flag in USART_SR is reset to 0 as soon as we write USART_DR. If USART_SR is not read before, writing USART_DR does not clear "transmission complete". See STM32F4 USART documentation for more detailed description.
-      USART_DR = v;  // Start transmission by writing to data register
-    }
-  }
-}
+//void USART2_IRQHandler(void);
+//void USART2_IRQHandler(void) {
+//  int UsartStatus;
+//  uint8_t v;
+//  int r;
+//
+//  UsartStatus = USART_SR;                              // Examine status register
+//  if (UsartStatus & (1 << USART_RXNE)) {               // Data received?
+//    v = USART_DR;                                      // Read data
+//    if ((UsartStatus & USART_RX_ERROR_FLAGS) == 0) {   // Only process data if no error occurred
+//      (void)v;                                         // Avoid warning in BTL
+//      if (_cbOnRx) {
+//        _cbOnRx(v);
+//      }
+//    }
+//  }
+//  if (UsartStatus & (1 << USART_TXE)) {                // Tx (data register) empty? => Send next character Note: Shift register may still hold a character that has not been sent yet.
+//    //
+//    // Under special circumstances, (old) BTL of Flasher does not wait until a complete string has been sent via UART,
+//    // so there might be an TxE interrupt pending *before* the FW had a chance to set the callbacks accordingly which would result in a NULL-pointer call...
+//    // Therefore, we need to check if the function pointer is valid.
+//    //
+//    if (_cbOnTx == NULL) {  // No callback set? => Nothing to do...
+//      return;
+//    }
+//    r = _cbOnTx(&v);
+//    if (r == 0) {                          // No more characters to send ?
+//      USART_CR1 &= ~(1UL << USART_TXEIE);  // Disable further tx interrupts
+//    } else {
+//      USART_SR;      // Makes sure that "transmission complete" flag in USART_SR is reset to 0 as soon as we write USART_DR. If USART_SR is not read before, writing USART_DR does not clear "transmission complete". See STM32F4 USART documentation for more detailed description.
+//      USART_DR = v;  // Start transmission by writing to data register
+//    }
+//  }
+//}
 
 /*********************************************************************
 *
