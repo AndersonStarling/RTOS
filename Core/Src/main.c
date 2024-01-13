@@ -30,6 +30,7 @@
 #include "DWT_Counter.h"
 #include "Rtc_Lib.h"
 #include "Led_Mode.h"
+#include "RTOS_State_Machine.h"
 
 /* USER CODE END Includes */
 
@@ -56,6 +57,16 @@ TaskHandle_t Led_2_Handler_Kernel_Pointer;
 TaskHandle_t Led_3_Handler_Kernel_Pointer;
 TaskHandle_t Task_Suspend_And_Resume_Kernel_Pointer;
 TaskHandle_t Task_Print_Kernel_Pointer;
+TaskHandle_t Task_Display_Menu_Kernel_Pointer;
+
+QueueHandle_t Queue_Data;
+QueueHandle_t Queue_Print;
+
+RTOS_State_Machine_enum_t Global_State = main_menu;
+
+
+
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -162,6 +173,18 @@ int main(void)
                             "Task Print",
                             2,
                             &Task_Print_Kernel_Pointer
+                          );
+
+    /* Check xTaskCreate status */
+    configASSERT(status == pdPASS);
+
+    /* Create task 6 */
+    status = xTaskCreate(   Task_Display_Menu,
+                            "Task_6",
+                            400,
+                            "Task Display Menu",
+                            2,
+                            &Task_Display_Menu_Kernel_Pointer
                           );
 
     /* Check xTaskCreate status */
