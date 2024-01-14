@@ -12,6 +12,10 @@
 
 #define UART_IN_USE huart1
 
+extern TaskHandle_t Task_Print_Queue_Kernel_Ptr;
+extern TaskHandle_t Task_Print_Menu_Kernel_Ptr;
+extern TaskHandle_t Task_Led_Effect_Kernel_Ptr;
+extern TaskHandle_t Task_RTC_Kernel_Ptr;
 
 extern QueueHandle_t Queue_Data;
 extern QueueHandle_t Queue_Print;
