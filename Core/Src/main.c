@@ -52,12 +52,10 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-TaskHandle_t Led_1_Handler_Kernel_Pointer;
-TaskHandle_t Led_2_Handler_Kernel_Pointer;
-TaskHandle_t Led_3_Handler_Kernel_Pointer;
-TaskHandle_t Task_Suspend_And_Resume_Kernel_Pointer;
-TaskHandle_t Task_Print_Kernel_Pointer;
-TaskHandle_t Task_Display_Menu_Kernel_Pointer;
+TaskHandle_t Task_Print_Queue_Kernel_Ptr;
+TaskHandle_t Task_Print_Menu_Kernel_Ptr;
+TaskHandle_t Task_Led_Effect_Kernel_Ptr;
+TaskHandle_t Task_RTC_Kernel_Ptr;
 
 QueueHandle_t Queue_Data;
 QueueHandle_t Queue_Print;
@@ -119,80 +117,54 @@ int main(void)
     SEGGER_SYSVIEW_Conf();
 
     /* Create task 1 */
-    status = xTaskCreate(   Led_1_Handler,
+    status = xTaskCreate(   Task_Print_Queue,
                             "Task_1",
                             400,
-                            "Led_1 toggle",
+                            "Task Print Queue",
                             2,
-                            &Led_1_Handler_Kernel_Pointer
+                            &Task_Print_Queue_Kernel_Ptr
                           );
 
     /* Check xTaskCreate status */
     configASSERT(status == pdPASS);
 
     /* Create task 2 */
-    status = xTaskCreate(   Led_2_Handler,
+    status = xTaskCreate(   Task_Print_Menu,
                             "Task_2",
                             400,
-                            "Led_2 toggle",
+                            "Task Print Menu",
                             2,
-                            &Led_2_Handler_Kernel_Pointer
+                            &Task_Print_Menu_Kernel_Ptr
                           );
 
     /* Check xTaskCreate status */
     configASSERT(status == pdPASS);
 
     /* Create task 3 */
-    status = xTaskCreate(   Led_3_Handler,
+    status = xTaskCreate(   Task_Led_Effect,
                             "Task_3",
                             400,
-                            "Led_3 toggle",
+                            "Task Led Effect",
                             2,
-                            &Led_3_Handler_Kernel_Pointer
+                            &Task_Led_Effect_Kernel_Ptr
                           );
 
     /* Check xTaskCreate status */
     configASSERT(status == pdPASS);
 
     /* Create task 4 */
-    status = xTaskCreate(   Task_Resume_And_Suspend,
+    status = xTaskCreate(   Task_RTC,
                             "Task_4",
                             400,
-                            "Resume and Suspend Task",
+                            "Task RTC",
                             2,
-                            &Task_Suspend_And_Resume_Kernel_Pointer
-                          );
-
-    /* Check xTaskCreate status */
-    configASSERT(status == pdPASS);
-
-    /* Create task 5 */
-    status = xTaskCreate(   Task_Print_Information,
-                            "Task_5",
-                            400,
-                            "Task Print",
-                            2,
-                            &Task_Print_Kernel_Pointer
-                          );
-
-    /* Check xTaskCreate status */
-    configASSERT(status == pdPASS);
-
-    /* Create task 6 */
-    status = xTaskCreate(   Task_Display_Menu,
-                            "Task_6",
-                            400,
-                            "Task Display Menu",
-                            2,
-                            &Task_Display_Menu_Kernel_Pointer
+                            &Task_RTC_Kernel_Ptr
                           );
 
     /* Check xTaskCreate status */
     configASSERT(status == pdPASS);
 
     LED_Mode_Off();
-
-    OS_Task_Init();
 
     vTaskStartScheduler();
 
