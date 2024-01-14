@@ -267,6 +267,30 @@ void Task_Print_Menu(void * Task_Param)
 	}
 }
 
+void Task_Led_Effect(void * Task_Param)
+{
+	const uint8_t * Print_Msg = \
+	                            "==============================\n" \
+								"========== LED effect ========\n" \
+								"==============================\n" \
+								    "0. Mode 0\n"            \
+									"1. Mode 1\n"            \
+									"2. Mode 2\n"
+
+    for(;;)
+	{
+		/* Send message pointer to queue */
+	    xQueueSendToFront(Queue_Print,
+                          &Print_Msg,
+                          pdMS_TO_TICKS(500));
+
+		xTaskNotify(&Task_Print_Queue, 0, eSetValueWithOverwrite);
+
+        /* Wait event */
+        xTaskNotifyWait(0, 0, NULL, pdMS_TO_TICKS(500));	 
+	}
+}
+
 void Task_Handle_Received_Command(void * Task_Param)
 {
 	UBaseType_t Num_Element_In_Queue = 0;
