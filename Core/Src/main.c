@@ -167,6 +167,15 @@ int main(void)
 
     LED_Mode_Off();
 
+    /* Create queue print */
+    Queue_Data = xQueueCreate (10, sizeof(char));
+	  configASSERT(Queue_Data != NULL);
+
+    /* Create queue print */
+    Queue_Print = xQueueCreate (10, sizeof(size_t));
+	  configASSERT(Queue_Print != NULL);
+
+
     vTaskStartScheduler();
 
   /* USER CODE END 2 */

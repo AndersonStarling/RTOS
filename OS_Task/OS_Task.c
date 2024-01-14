@@ -70,7 +70,7 @@ void Task_Print_Menu(void * Task_Param)
                           &Print_Msg,
                           pdMS_TO_TICKS(500));
 
-		xTaskNotify(&Task_Print_Queue, 0, eSetValueWithOverwrite);
+		xTaskNotify(Task_Print_Queue, 0, eSetValueWithOverwrite);
 
         /* Wait event */
         xTaskNotifyWait(0, 0, NULL, pdMS_TO_TICKS(500));	 
@@ -94,7 +94,7 @@ void Task_Led_Effect(void * Task_Param)
                           &Print_Msg,
                           pdMS_TO_TICKS(500));
 
-		xTaskNotify(&Task_Print_Queue, 0, eSetValueWithOverwrite);
+		xTaskNotify(Task_Print_Queue, 0, eSetValueWithOverwrite);
 
         /* Wait event */
         xTaskNotifyWait(0, 0, NULL, pdMS_TO_TICKS(500));	 
@@ -117,7 +117,7 @@ void Task_RTC(void * Task_Param)
                           &Print_Msg,
                           pdMS_TO_TICKS(500));
 
-		xTaskNotify(&Task_Print_Queue, 0, eSetValueWithOverwrite);
+		xTaskNotify(Task_Print_Queue_Kernel_Ptr, 0, eSetValueWithOverwrite);
 
         /* Wait event */
         xTaskNotifyWait(0, 0, NULL, pdMS_TO_TICKS(500));	 
@@ -147,13 +147,13 @@ void Task_Handle_Received_Command(void * Task_Param)
 			switch(Received_Command)
 			{
 				case main_menu:
-				    xTaskNotify(&Task_Print_Menu_Kernel_Ptr, 0, eSetValueWithOverwrite);
+				    xTaskNotify(Task_Print_Menu_Kernel_Ptr, 0, eSetValueWithOverwrite);
 				    break;
 				case led_menu:
-				    xTaskNotify(&Task_Led_Effect_Kernel_Ptr, 0, eSetValueWithOverwrite);
+				    xTaskNotify(Task_Led_Effect_Kernel_Ptr, 0, eSetValueWithOverwrite);
 				    break;
 				case rtc_menu:
-				    xTaskNotify(&Task_RTC_Kernel_Ptr, 0, eSetValueWithOverwrite);
+				    xTaskNotify(Task_RTC_Kernel_Ptr, 0, eSetValueWithOverwrite);
 				    break;
 			}
 		}
