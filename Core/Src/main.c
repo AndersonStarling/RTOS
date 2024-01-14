@@ -60,6 +60,7 @@ TaskHandle_t Task_RTC_Kernel_Ptr;
 
 QueueHandle_t Queue_Data;
 QueueHandle_t Queue_Print;
+uint8_t App_Data = 0;
 
 RTOS_State_Machine_enum_t Global_State = main_menu;
 
@@ -175,6 +176,8 @@ int main(void)
     Queue_Print = xQueueCreate (10, sizeof(size_t));
 	  configASSERT(Queue_Print != NULL);
 
+    /* Enable UART data byte reception again in IT mode */
+	  HAL_UART_Receive_IT(&huart1, (uint8_t*)&App_Data, 1);
 
     vTaskStartScheduler();
 

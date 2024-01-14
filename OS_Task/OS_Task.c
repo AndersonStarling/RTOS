@@ -20,14 +20,22 @@ extern TaskHandle_t Task_RTC_Kernel_Ptr;
 
 extern QueueHandle_t Queue_Data;
 extern QueueHandle_t Queue_Print;
+extern uint8_t App_Data;
 
 extern RTOS_State_Machine_enum_t Global_State;
 
 /* USART receive call back */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
+    xQueueSendFromISR
+                     (
+                        Queue_Data,
+                        &App_Data,
+                        NULL
+                     );
 
-
+    HAL_UART_Receive_IT(&huart1, (uint8_t*)&App_Data, 1);
+ 
 }
 
 
@@ -146,13 +154,10 @@ void Task_Handle_Received_Command(void * Task_Param)
 
 			switch(Received_Command)
 			{
-				case main_menu:
-				    xTaskNotify(Task_Print_Menu_Kernel_Ptr, 0, eSetValueWithOverwrite);
-				    break;
-				case led_menu:
+				case 0:
 				    xTaskNotify(Task_Led_Effect_Kernel_Ptr, 0, eSetValueWithOverwrite);
 				    break;
-				case rtc_menu:
+				case 1:
 				    xTaskNotify(Task_RTC_Kernel_Ptr, 0, eSetValueWithOverwrite);
 				    break;
 			}
