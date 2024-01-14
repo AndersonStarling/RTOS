@@ -31,6 +31,7 @@
 #include "Rtc_Lib.h"
 #include "Led_Mode.h"
 #include "RTOS_State_Machine.h"
+#include "queue.h"
 
 /* USER CODE END Includes */
 

@@ -9,6 +9,7 @@
 #include "Rtc_Lib.h"
 #include "Print_Lib.h"
 #include "RTOS_State_Machine.h"
+#include "queue.h"
 
 #define UART_IN_USE huart1
 
@@ -25,8 +26,7 @@ extern RTOS_State_Machine_enum_t Global_State;
 /* USART receive call back */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-    /* Re-Enable RXNE interrupt */
-	HAL_UART_Receive_IT(&UART_IN_USE, &Rx_Buffer[0], 1);
+
 
 }
 
@@ -150,10 +150,10 @@ void Task_Handle_Received_Command(void * Task_Param)
 				    xTaskNotify(&Task_Print_Menu_Kernel_Ptr, 0, eSetValueWithOverwrite);
 				    break;
 				case led_menu:
-				    xTaskNotify(&Task_Handle_Led_Effect_Kernel_Ptr, 0, eSetValueWithOverwrite);
+				    xTaskNotify(&Task_Led_Effect_Kernel_Ptr, 0, eSetValueWithOverwrite);
 				    break;
 				case rtc_menu:
-				    xTaskNotify(&Task_Handle_RTC_Kernel_Ptr, 0, eSetValueWithOverwrite);
+				    xTaskNotify(&Task_RTC_Kernel_Ptr, 0, eSetValueWithOverwrite);
 				    break;
 			}
 		}
