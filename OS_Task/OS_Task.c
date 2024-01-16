@@ -17,6 +17,7 @@ extern TaskHandle_t Task_Print_Queue_Kernel_Ptr;
 extern TaskHandle_t Task_Print_Menu_Kernel_Ptr;
 extern TaskHandle_t Task_Led_Effect_Kernel_Ptr;
 extern TaskHandle_t Task_RTC_Kernel_Ptr;
+extern TaskHandle_t Task_Handle_Received_Command_Kernel_Ptr;
 
 extern QueueHandle_t Queue_Data;
 extern QueueHandle_t Queue_Print;
@@ -35,34 +36,40 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
                      );
 
     HAL_UART_Receive_IT(&huart1, (uint8_t*)&App_Data, 1);
+
+    xTaskNotifyFromISR(Task_Handle_Received_Command_Kernel_Ptr,
+                                    0,
+									eSetValueWithOverwrite,
+                                    NULL );
  
 }
 
-
 void Task_Print_Queue(void * Task_Param)
 {
-    uint8_t * Received_Data = NULL;
+    uint32_t Received_Data;
 	UBaseType_t Num_Element_In_Queue = 0;
 	
-	Num_Element_In_Queue = uxQueueMessagesWaiting(Queue_Data);
-
-	if(Num_Element_In_Queue != 0)
+	for(;;)
 	{
-        xQueueReceive(
-                    Queue_Print,
-                    Received_Data,
-                    pdMS_TO_TICKS(500)
-                 );
+		Num_Element_In_Queue = uxQueueMessagesWaiting(Queue_Print);
 
-	    App_Print_String(Received_Data);
+		if(Num_Element_In_Queue != 0)
+		{
+	        xQueueReceive(
+	                    Queue_Print,
+	                    &Received_Data,
+	                    pdMS_TO_TICKS(500)
+	                 );
+
+		    App_Print_String((uint8_t *)Received_Data);
+		}
 	}
-
-
 }
 
 void Task_Print_Menu(void * Task_Param)
 {
-    const uint8_t * Print_Msg = "RTC and LED application v1.1\n" \
+    const uint8_t * Print_Msg = "\n"                               \
+    		                    "RTC and LED application v1.1\n"   \
 	                            "==============================\n" \
 								"============ Menu ============\n" \
 								"==============================\n" \
@@ -78,16 +85,14 @@ void Task_Print_Menu(void * Task_Param)
                           &Print_Msg,
                           pdMS_TO_TICKS(500));
 
-		xTaskNotify(Task_Print_Queue, 0, eSetValueWithOverwrite);
-
         /* Wait event */
-        xTaskNotifyWait(0, 0, NULL, pdMS_TO_TICKS(500));	 
+        while(pdTRUE != xTaskNotifyWait(0, 0, NULL, pdMS_TO_TICKS(500)));	 
 	}
 }
 
 void Task_Led_Effect(void * Task_Param)
 {
-	const uint8_t * Print_Msg = \
+	const uint8_t * Print_Msg = "\n"                               \
 	                            "==============================\n" \
 								"========== LED effect ========\n" \
 								"==============================\n" \
@@ -97,21 +102,20 @@ void Task_Led_Effect(void * Task_Param)
 
     for(;;)
 	{
+        /* Wait event */
+        while(pdTRUE != xTaskNotifyWait(0, 0, NULL, pdMS_TO_TICKS(500))){};
+
 		/* Send message pointer to queue */
 	    xQueueSendToFront(Queue_Print,
                           &Print_Msg,
                           pdMS_TO_TICKS(500));
 
-		xTaskNotify(Task_Print_Queue, 0, eSetValueWithOverwrite);
-
-        /* Wait event */
-        xTaskNotifyWait(0, 0, NULL, pdMS_TO_TICKS(500));	 
 	}
 }
 
 void Task_RTC(void * Task_Param)
 {
-	const uint8_t * Print_Msg = \
+	const uint8_t * Print_Msg = "\n"                               \
 	                            "==============================\n" \
 								"============ RTC =============\n" \
 								"==============================\n" \
@@ -120,15 +124,16 @@ void Task_RTC(void * Task_Param)
 
     for(;;)
 	{
+        /* Wait event */
+        while(pdTRUE != xTaskNotifyWait(0, 0, NULL, pdMS_TO_TICKS(500))){};
+
 		/* Send message pointer to queue */
 	    xQueueSendToFront(Queue_Print,
                           &Print_Msg,
                           pdMS_TO_TICKS(500));
 
-		xTaskNotify(Task_Print_Queue_Kernel_Ptr, 0, eSetValueWithOverwrite);
-
         /* Wait event */
-        xTaskNotifyWait(0, 0, NULL, pdMS_TO_TICKS(500));	 
+        while(pdTRUE != xTaskNotifyWait(0, 0, NULL, pdMS_TO_TICKS(500)));	 	 
 	}
 }
 
@@ -140,7 +145,7 @@ void Task_Handle_Received_Command(void * Task_Param)
     for(;;)
 	{
         /* Wait event */
-        xTaskNotifyWait(0, 0, NULL, pdMS_TO_TICKS(500));
+        while(pdTRUE != xTaskNotifyWait(0, 0, NULL, pdMS_TO_TICKS(500))){};
 
 	    Num_Element_In_Queue = uxQueueMessagesWaiting(Queue_Data);
 
@@ -154,11 +159,14 @@ void Task_Handle_Received_Command(void * Task_Param)
 
 			switch(Received_Command)
 			{
-				case 0:
+				case '0':
 				    xTaskNotify(Task_Led_Effect_Kernel_Ptr, 0, eSetValueWithOverwrite);
 				    break;
-				case 1:
+				case '1':
 				    xTaskNotify(Task_RTC_Kernel_Ptr, 0, eSetValueWithOverwrite);
+				    break;
+				case '2':
+				    xTaskNotify(Task_Print_Menu_Kernel_Ptr, 0, eSetValueWithOverwrite);
 				    break;
 			}
 		}

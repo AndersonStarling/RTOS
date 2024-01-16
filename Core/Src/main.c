@@ -57,6 +57,7 @@ TaskHandle_t Task_Print_Queue_Kernel_Ptr;
 TaskHandle_t Task_Print_Menu_Kernel_Ptr;
 TaskHandle_t Task_Led_Effect_Kernel_Ptr;
 TaskHandle_t Task_RTC_Kernel_Ptr;
+TaskHandle_t Task_Handle_Received_Command_Kernel_Ptr;
 
 QueueHandle_t Queue_Data;
 QueueHandle_t Queue_Print;
@@ -161,6 +162,18 @@ int main(void)
                             "Task RTC",
                             2,
                             &Task_RTC_Kernel_Ptr
+                          );
+
+    /* Check xTaskCreate status */
+    configASSERT(status == pdPASS);
+
+    /* Create task 5 */
+    status = xTaskCreate(   Task_Handle_Received_Command,
+                            "Task_5",
+                            400,
+                            "Task Handle received command",
+                            2,
+                            &Task_Handle_Received_Command_Kernel_Ptr
                           );
 
     /* Check xTaskCreate status */
