@@ -98,10 +98,14 @@ void Task_Led_Effect(void * Task_Param)
 								"==============================\n" \
 								    "0. Mode 0\n"            \
 									"1. Mode 1\n"            \
-									"2. Mode 2\n";
+									"2. Mode 2\n"            \
+									"3. Exit\n";
 
     for(;;)
 	{
+    	/* Switch app state to led_menu */
+    	Global_State = led_menu;
+
         /* Wait event */
         while(pdTRUE != xTaskNotifyWait(0, 0, NULL, pdMS_TO_TICKS(500))){};
 
@@ -121,6 +125,9 @@ void Task_RTC(void * Task_Param)
 								"==============================\n" \
 								    "0. Configure time\n"            \
 									"1. Configure date\n";
+	                                "2. Exit\n";
+
+    Global_State = rtc_menu;
 
     for(;;)
 	{
@@ -132,8 +139,6 @@ void Task_RTC(void * Task_Param)
                           &Print_Msg,
                           pdMS_TO_TICKS(500));
 
-        /* Wait event */
-        while(pdTRUE != xTaskNotifyWait(0, 0, NULL, pdMS_TO_TICKS(500)));	 	 
 	}
 }
 
@@ -157,17 +162,53 @@ void Task_Handle_Received_Command(void * Task_Param)
                                pdMS_TO_TICKS(500)
                             );
 
-			switch(Received_Command)
+			if( Global_State = main_menu )
 			{
-				case '0':
-				    xTaskNotify(Task_Led_Effect_Kernel_Ptr, 0, eSetValueWithOverwrite);
-				    break;
-				case '1':
-				    xTaskNotify(Task_RTC_Kernel_Ptr, 0, eSetValueWithOverwrite);
-				    break;
-				case '2':
-				    xTaskNotify(Task_Print_Menu_Kernel_Ptr, 0, eSetValueWithOverwrite);
-				    break;
+				switch(Received_Command)
+				{
+					case '0':
+					    xTaskNotify(Task_Led_Effect_Kernel_Ptr, 0, eSetValueWithOverwrite);
+					    break;
+					case '1':
+					    xTaskNotify(Task_RTC_Kernel_Ptr, 0, eSetValueWithOverwrite);
+					    break;
+					case '2':
+					    xTaskNotify(Task_Print_Menu_Kernel_Ptr, 0, eSetValueWithOverwrite);
+					    break;
+				}
+			}
+			else if( Global_State = led_menu )
+			{
+				switch(Received_Command)
+				{
+					case '0':
+					    xTaskNotify(Task_Led_Effect_Kernel_Ptr, 0, eSetValueWithOverwrite);
+					    break;
+					case '1':
+					    xTaskNotify(Task_Led_Effect_Kernel_Ptr, 1, eSetValueWithOverwrite);
+					    break;
+					case '2':
+					    xTaskNotify(Task_Led_Effect_Kernel_Ptr, 2, eSetValueWithOverwrite);
+					    break;
+					case '3':
+					    xTaskNotify(Task_Led_Effect_Kernel_Ptr, 3, eSetValueWithOverwrite);
+					    break;
+				}
+			}
+			else if( Global_State = rtc_menu)
+			{
+				switch(Received_Command)
+				{
+					case '0':
+					    xTaskNotify(Task_RTC_Kernel_Ptr, 0, eSetValueWithOverwrite);
+					    break;
+					case '1':
+					    xTaskNotify(Task_RTC_Kernel_Ptr, 1, eSetValueWithOverwrite);
+					    break;
+					case '2':
+					    xTaskNotify(Task_RTC_Kernel_Ptr, 2, eSetValueWithOverwrite);
+					    break;
+				}
 			}
 		}
 	}
