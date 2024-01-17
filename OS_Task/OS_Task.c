@@ -119,12 +119,15 @@ void Task_Led_Effect(void * Task_Param)
         switch(Notified_Value)
         {
             case 0:
+            	LED_Mode_Off();
             	LED_Mode_0();
             	break;
             case 1:
+            	LED_Mode_Off();
             	LED_Mode_1();
             	break;
             case 2:
+            	LED_Mode_Off();
             	LED_Mode_2();
             	break;
             case 3:
