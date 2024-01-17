@@ -183,14 +183,14 @@ int main(void)
 
     /* Create queue print */
     Queue_Data = xQueueCreate (10, sizeof(char));
-	  configASSERT(Queue_Data != NULL);
+	configASSERT(Queue_Data != NULL);
 
     /* Create queue print */
     Queue_Print = xQueueCreate (10, sizeof(size_t));
-	  configASSERT(Queue_Print != NULL);
+	configASSERT(Queue_Print != NULL);
 
     /* Enable UART data byte reception again in IT mode */
-	  HAL_UART_Receive_IT(&huart1, (uint8_t*)&App_Data, 1);
+	HAL_UART_Receive_IT(&huart1, (uint8_t*)&App_Data, 1);
 
     vTaskStartScheduler();
 
