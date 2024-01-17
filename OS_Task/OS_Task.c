@@ -101,18 +101,36 @@ void Task_Led_Effect(void * Task_Param)
 									"2. Mode 2\n"            \
 									"3. Exit\n";
 
+	uint32_t Notified_Value = 0;
+
     for(;;)
 	{
+        /* Wait event */
+        while(pdTRUE != xTaskNotifyWait(0, 0, &Notified_Value, pdMS_TO_TICKS(500))){};
+
     	/* Switch app state to led_menu */
     	Global_State = led_menu;
-
-        /* Wait event */
-        while(pdTRUE != xTaskNotifyWait(0, 0, NULL, pdMS_TO_TICKS(500))){};
 
 		/* Send message pointer to queue */
 	    xQueueSendToFront(Queue_Print,
                           &Print_Msg,
                           pdMS_TO_TICKS(500));
+
+        switch(Notified_Value)
+        {
+            case 0:
+            	LED_Mode_0();
+            	break;
+            case 1:
+            	LED_Mode_1();
+            	break;
+            case 2:
+            	LED_Mode_2();
+            	break;
+            case 3:
+            	xTaskNotify(Task_Print_Menu_Kernel_Ptr, 0xff, eSetValueWithOverwrite);
+            	break;
+        }
 
 	}
 }
@@ -123,21 +141,34 @@ void Task_RTC(void * Task_Param)
 	                            "==============================\n" \
 								"============ RTC =============\n" \
 								"==============================\n" \
-								    "0. Configure time\n"            \
-									"1. Configure date\n";
+								    "0. Configure time\n"          \
+									"1. Configure date\n"          \
 	                                "2. Exit\n";
 
-    Global_State = rtc_menu;
+	uint32_t Notified_Value = 0;
 
     for(;;)
 	{
         /* Wait event */
         while(pdTRUE != xTaskNotifyWait(0, 0, NULL, pdMS_TO_TICKS(500))){};
 
+        Global_State = rtc_menu;
+
 		/* Send message pointer to queue */
 	    xQueueSendToFront(Queue_Print,
                           &Print_Msg,
                           pdMS_TO_TICKS(500));
+
+        switch(Notified_Value)
+        {
+            case 0:
+            	break;
+            case 1:
+            	break;
+            case 2:
+            	xTaskNotify(Task_Print_Menu_Kernel_Ptr, 0xff, eSetValueWithOverwrite);
+            	break;
+        }
 
 	}
 }
@@ -162,22 +193,22 @@ void Task_Handle_Received_Command(void * Task_Param)
                                pdMS_TO_TICKS(500)
                             );
 
-			if( Global_State = main_menu )
+			if( Global_State == main_menu )
 			{
 				switch(Received_Command)
 				{
 					case '0':
-					    xTaskNotify(Task_Led_Effect_Kernel_Ptr, 0, eSetValueWithOverwrite);
+					    xTaskNotify(Task_Led_Effect_Kernel_Ptr, 0xff, eSetValueWithOverwrite);
 					    break;
 					case '1':
-					    xTaskNotify(Task_RTC_Kernel_Ptr, 0, eSetValueWithOverwrite);
+					    xTaskNotify(Task_RTC_Kernel_Ptr, 0xff, eSetValueWithOverwrite);
 					    break;
 					case '2':
-					    xTaskNotify(Task_Print_Menu_Kernel_Ptr, 0, eSetValueWithOverwrite);
+					    xTaskNotify(Task_Print_Menu_Kernel_Ptr, 0xff, eSetValueWithOverwrite);
 					    break;
 				}
 			}
-			else if( Global_State = led_menu )
+			else if( Global_State == led_menu )
 			{
 				switch(Received_Command)
 				{
@@ -195,7 +226,7 @@ void Task_Handle_Received_Command(void * Task_Param)
 					    break;
 				}
 			}
-			else if( Global_State = rtc_menu)
+			else if( Global_State == rtc_menu)
 			{
 				switch(Received_Command)
 				{
