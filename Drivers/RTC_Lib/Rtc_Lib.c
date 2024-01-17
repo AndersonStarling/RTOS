@@ -35,6 +35,7 @@ void App_RTC_Print_Time(void)
     App_Print_Character(':');
     App_Print_Character(Sec_High_Byte);
     App_Print_Character(Sec_Low_Byte);
+    App_Print_String("\n");
 }
 
 /* Print the date */
@@ -70,19 +71,20 @@ void App_RTC_Print_Date(void)
     App_Print_Character('/');
     App_Print_Character(Year_High_Byte);
     App_Print_Character(Year_Low_Byte);
+    App_Print_String("\n");
 }
 
 /* Set the time */
 void App_Set_Time(RTC_TimeTypeDef *sTime)
 {
-    RTC_TimeTypeDef sTime_local;
+//    RTC_TimeTypeDef sTime_local;
 
     /* Use as default value */
-    HAL_RTC_GetTime(&hrtc, &sTime_local, RTC_HOURFORMAT12_PM);
-    sTime->SubSeconds = sTime_local.SubSeconds;
-    sTime->SecondFraction = sTime_local.SecondFraction;
-    sTime->DayLightSaving = sTime_local.DayLightSaving;
-    sTime->StoreOperation = sTime_local.StoreOperation;
+//    HAL_RTC_GetTime(&hrtc, &sTime_local, RTC_HOURFORMAT12_PM);
+//    sTime->SubSeconds = sTime_local.SubSeconds;
+//    sTime->SecondFraction = sTime_local.SecondFraction;
+//    sTime->DayLightSaving = sTime_local.DayLightSaving;
+//    sTime->StoreOperation = sTime_local.StoreOperation;
 
     /* Set new time */
     HAL_RTC_SetTime(&hrtc, sTime, RTC_HOURFORMAT12_PM);
@@ -92,11 +94,11 @@ void App_Set_Time(RTC_TimeTypeDef *sTime)
 /* Set the date */
 void App_Set_Date(RTC_DateTypeDef *sDate)
 {
-    RTC_DateTypeDef sDate_local;
+//    RTC_DateTypeDef sDate_local;
 
     /* Use as default value */
-    HAL_RTC_GetDate(&hrtc, &sDate_local, RTC_FORMAT_BCD);
-    sDate->WeekDay = sDate_local.WeekDay;
+//    HAL_RTC_GetDate(&hrtc, &sDate_local, RTC_FORMAT_BCD);
+//    sDate->WeekDay = sDate_local.WeekDay;
 
     /* Set new time */
     HAL_RTC_SetDate(&hrtc, sDate, RTC_FORMAT_BCD);

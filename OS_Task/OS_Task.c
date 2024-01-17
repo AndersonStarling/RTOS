@@ -80,6 +80,8 @@ void Task_Print_Menu(void * Task_Param)
 
     for(;;)
 	{
+    	App_RTC_Print_Time();
+    	App_RTC_Print_Date();
 		/* Send message pointer to queue */
 	    xQueueSendToFront(Queue_Print,
                           &Print_Msg,
@@ -153,7 +155,7 @@ void Task_RTC(void * Task_Param)
     for(;;)
 	{
         /* Wait event */
-        while(pdTRUE != xTaskNotifyWait(0, 0, NULL, pdMS_TO_TICKS(500))){};
+        while(pdTRUE != xTaskNotifyWait(0, 0, &Notified_Value, pdMS_TO_TICKS(500))){};
 
         Global_State = rtc_menu;
 
@@ -174,6 +176,26 @@ void Task_RTC(void * Task_Param)
         }
 
 	}
+}
+
+void Task_RTC_Configure_Time(void * Task_Param)
+{
+	const uint8_t * Print_Msg = "\n"                               \
+	                            "==============================\n" \
+								"====== RTC Configure Time ====\n" \
+								"==============================\n" \
+								    "0. Configure hour\n"          \
+									"1. Configure min\n"           \
+									"2. Configure second\n"        \
+	                                "3. Exit\n";
+
+    for(;;)
+    {
+        /* Wait event */
+        while(pdTRUE != xTaskNotifyWait(0, 0, &Notified_Value, pdMS_TO_TICKS(500))){};
+
+        Global_State = rtc_menu_configure_time;
+    }
 }
 
 void Task_Handle_Received_Command(void * Task_Param)
