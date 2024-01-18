@@ -75,19 +75,46 @@ void App_RTC_Print_Date(void)
 }
 
 /* Set the time */
-void App_Set_Time(RTC_TimeTypeDef *sTime)
+void App_Set_Hour(uint8_t Hour)
 {
-//    RTC_TimeTypeDef sTime_local;
+    RTC_TimeTypeDef sTime_local;
 
     /* Use as default value */
-//    HAL_RTC_GetTime(&hrtc, &sTime_local, RTC_HOURFORMAT12_PM);
-//    sTime->SubSeconds = sTime_local.SubSeconds;
-//    sTime->SecondFraction = sTime_local.SecondFraction;
-//    sTime->DayLightSaving = sTime_local.DayLightSaving;
-//    sTime->StoreOperation = sTime_local.StoreOperation;
+    HAL_RTC_GetTime(&hrtc, &sTime_local, RTC_HOURFORMAT12_PM);
+
+    /* Set hour */
+    sTime_local.Hours = Hour;
 
     /* Set new time */
-    HAL_RTC_SetTime(&hrtc, sTime, RTC_HOURFORMAT12_PM);
+    HAL_RTC_SetTime(&hrtc, &sTime_local, RTC_HOURFORMAT12_PM);
+}
+
+void App_Set_Min(uint8_t Min)
+{
+    RTC_TimeTypeDef sTime_local;
+
+    /* Use as default value */
+    HAL_RTC_GetTime(&hrtc, &sTime_local, RTC_HOURFORMAT12_PM);
+
+    /* Set hour */
+    sTime_local.Min = Min;
+
+    /* Set new time */
+    HAL_RTC_SetTime(&hrtc, &sTime_local, RTC_HOURFORMAT12_PM);
+}
+
+void App_Set_Second(uint8_t Second)
+{
+    RTC_TimeTypeDef sTime_local;
+
+    /* Use as default value */
+    HAL_RTC_GetTime(&hrtc, &sTime_local, RTC_HOURFORMAT12_PM);
+
+    /* Set hour */
+    sTime_local.Seconds = Second;
+
+    /* Set new time */
+    HAL_RTC_SetTime(&hrtc, &sTime_local, RTC_HOURFORMAT12_PM);
 }
 
 

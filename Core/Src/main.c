@@ -58,9 +58,13 @@ TaskHandle_t Task_Print_Menu_Kernel_Ptr;
 TaskHandle_t Task_Led_Effect_Kernel_Ptr;
 TaskHandle_t Task_RTC_Kernel_Ptr;
 TaskHandle_t Task_Handle_Received_Command_Kernel_Ptr;
+TaskHandle_t Task_RTC_Configure_Hour_Kernel_Ptr;
+TaskHandle_t Task_RTC_Configure_Min_Kernel_Ptr;
+TaskHandle_t Task_RTC_Configure_Second_Kernel_Ptr;
 
 QueueHandle_t Queue_Data;
 QueueHandle_t Queue_Print;
+
 uint8_t App_Data = 0;
 
 RTOS_State_Machine_enum_t Global_State = main_menu;
@@ -174,6 +178,42 @@ int main(void)
                             "Task Handle received command",
                             2,
                             &Task_Handle_Received_Command_Kernel_Ptr
+                          );
+
+    /* Check xTaskCreate status */
+    configASSERT(status == pdPASS);
+
+    /* Create task 6 */
+    status = xTaskCreate(   Task_RTC_Configure_Hour,
+                            "Task_6",
+                            400,
+                            "Task RTC configure Hour",
+                            2,
+                            &Task_RTC_Configure_Hour_Kernel_Ptr
+                          );
+
+    /* Check xTaskCreate status */
+    configASSERT(status == pdPASS);
+
+    /* Create task 7 */
+    status = xTaskCreate(   Task_RTC_Configure_Min,
+                            "Task_7",
+                            400,
+                            "Task RTC configure Min",
+                            2,
+                            &Task_RTC_Configure_Min_Kernel_Ptr
+                          );
+
+    /* Check xTaskCreate status */
+    configASSERT(status == pdPASS);
+
+    /* Create task 8 */
+    status = xTaskCreate(   Task_RTC_Configure_Second,
+                            "Task_8",
+                            400,
+                            "Task RTC configure Second",
+                            2,
+                            &Task_RTC_Configure_Second_Kernel_Ptr
                           );
 
     /* Check xTaskCreate status */

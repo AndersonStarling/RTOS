@@ -18,6 +18,9 @@ extern TaskHandle_t Task_Print_Menu_Kernel_Ptr;
 extern TaskHandle_t Task_Led_Effect_Kernel_Ptr;
 extern TaskHandle_t Task_RTC_Kernel_Ptr;
 extern TaskHandle_t Task_Handle_Received_Command_Kernel_Ptr;
+extern TaskHandle_t Task_RTC_Configure_Hour_Kernel_Ptr;
+extern TaskHandle_t Task_RTC_Configure_Min_Kernel_Ptr;
+extern TaskHandle_t Task_RTC_Configure_Second_Kernel_Ptr;
 
 extern QueueHandle_t Queue_Data;
 extern QueueHandle_t Queue_Print;
@@ -189,13 +192,56 @@ void Task_RTC_Configure_Time(void * Task_Param)
 									"2. Configure second\n"        \
 	                                "3. Exit\n";
 
+	uint32_t Notified_Value = 0;
+
     for(;;)
     {
         /* Wait event */
         while(pdTRUE != xTaskNotifyWait(0, 0, &Notified_Value, pdMS_TO_TICKS(500))){};
 
         Global_State = rtc_menu_configure_time;
+
+		/* Send message pointer to queue */
+	    xQueueSendToFront(Queue_Print,
+                          &Print_Msg,
+                          pdMS_TO_TICKS(500));
     }
+}
+
+void Task_RTC_Configure_Hour(void * Task_Param)
+{
+	uint32_t Notified_Value = 0;
+
+    /* Wait event */
+    while(pdTRUE != xTaskNotifyWait(0, 0, &Notified_Value, pdMS_TO_TICKS(500))){};
+
+    Global_State = rtc_menu_configure_hour;
+
+    App_Set_Hour(Notified_Value);
+}
+
+void Task_RTC_Configure_Min(void * Task_Param)
+{
+	uint32_t Notified_Value = 0;
+
+    /* Wait event */
+    while(pdTRUE != xTaskNotifyWait(0, 0, &Notified_Value, pdMS_TO_TICKS(500))){};
+
+    Global_State = rtc_menu_configure_min;
+
+    App_Set_Hour(Notified_Value);
+}
+
+void Task_RTC_Configure_Second(void * Task_Param)
+{
+	uint32_t Notified_Value = 0;
+
+    /* Wait event */
+    while(pdTRUE != xTaskNotifyWait(0, 0, &Notified_Value, pdMS_TO_TICKS(500))){};
+
+    Global_State = rtc_menu_configure_min;
+
+    App_Set_Second(Notified_Value);
 }
 
 void Task_Handle_Received_Command(void * Task_Param)
@@ -265,6 +311,35 @@ void Task_Handle_Received_Command(void * Task_Param)
 					    xTaskNotify(Task_RTC_Kernel_Ptr, 2, eSetValueWithOverwrite);
 					    break;
 				}
+			}
+			else if( Global_State == rtc_menu_configure_time )
+			{
+				switch(Received_Command)
+				{
+				    case '0':
+
+				    	break;
+				    case '1':
+				    	break;
+				    case '2':
+				    	break;
+
+				}
+			}
+			else if(Global_State = rtc_menu_configure_hour)
+			{
+				/* Set Hour */
+				xTaskNotify(Task_RTC_Configure_Hour_Kernel_Ptr, Received_Command, eSetValueWithOverwrite);
+			}
+			else if(Global_State = rtc_menu_configure_min)
+			{
+				/* Set Min */
+				xTaskNotify(Task_RTC_Configure_Min_Kernel_Ptr, Received_Command, eSetValueWithOverwrite);
+			}
+			else if(Global_State = rtc_menu_configure_second)
+			{
+				/* Set Second */
+				xTaskNotify(Task_RTC_Configure_Second_Kernel_Ptr, Received_Command, eSetValueWithOverwrite);
 			}
 		}
 	}
