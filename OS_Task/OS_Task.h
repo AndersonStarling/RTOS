@@ -9,6 +9,10 @@ void Task_Led_Effect(void * Task_Param);
 void Task_RTC(void * Task_Param);
 void Task_Handle_Received_Command(void * Task_Param);
 void Task_Wakeup_Print_Task(void * Task_Param);
+void Task_RTC_Configure_Hour(void * Task_Param);
+void Task_RTC_Configure_Min(void * Task_Param);
+void Task_RTC_Configure_Second(void * Task_Param);
+
 
 #endif /* OS_TASK_H */
 

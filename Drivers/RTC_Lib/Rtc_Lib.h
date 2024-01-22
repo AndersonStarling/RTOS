@@ -18,10 +18,11 @@ void App_Set_Hour(uint8_t Hour);
 /* Set Min */
 void App_Set_Min(uint8_t Hour);
 
-void App_Set_Hour(uint8_t Hour);
+/* Set Hour */
+void App_Set_Second(uint8_t Hour);
 
-/* Set Second */
-void App_Set_Date(RTC_DateTypeDef *sDate);
+/* Set Date */
+void App_Set_Date(uint8_t Date);
 
 
 #endif /* RTC_LIB_H */

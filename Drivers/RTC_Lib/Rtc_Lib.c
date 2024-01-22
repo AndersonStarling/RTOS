@@ -97,7 +97,7 @@ void App_Set_Min(uint8_t Min)
     HAL_RTC_GetTime(&hrtc, &sTime_local, RTC_HOURFORMAT12_PM);
 
     /* Set hour */
-    sTime_local.Min = Min;
+    sTime_local.Minutes = Min;
 
     /* Set new time */
     HAL_RTC_SetTime(&hrtc, &sTime_local, RTC_HOURFORMAT12_PM);
@@ -119,16 +119,16 @@ void App_Set_Second(uint8_t Second)
 
 
 /* Set the date */
-void App_Set_Date(RTC_DateTypeDef *sDate)
+void App_Set_Date(uint8_t Date)
 {
-//    RTC_DateTypeDef sDate_local;
+    RTC_DateTypeDef sDate_local;
 
     /* Use as default value */
-//    HAL_RTC_GetDate(&hrtc, &sDate_local, RTC_FORMAT_BCD);
-//    sDate->WeekDay = sDate_local.WeekDay;
+    HAL_RTC_GetDate(&hrtc, &sDate_local, RTC_FORMAT_BCD);
+    sDate_local.Date = Date;
 
     /* Set new time */
-    HAL_RTC_SetDate(&hrtc, sDate, RTC_FORMAT_BCD);
+    HAL_RTC_SetDate(&hrtc, &sDate_local, RTC_FORMAT_BCD);
 }
 
 

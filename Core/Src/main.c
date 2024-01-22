@@ -61,6 +61,7 @@ TaskHandle_t Task_Handle_Received_Command_Kernel_Ptr;
 TaskHandle_t Task_RTC_Configure_Hour_Kernel_Ptr;
 TaskHandle_t Task_RTC_Configure_Min_Kernel_Ptr;
 TaskHandle_t Task_RTC_Configure_Second_Kernel_Ptr;
+TaskHandle_t Task_RTC_Configure_Time_Kernel_Ptr;
 
 QueueHandle_t Queue_Data;
 QueueHandle_t Queue_Print;
@@ -218,6 +219,19 @@ int main(void)
 
     /* Check xTaskCreate status */
     configASSERT(status == pdPASS);
+
+    /* Create task 9 */
+    status = xTaskCreate(   Task_RTC_Configure_Time,
+                            "Task_8",
+                            400,
+                            "Task RTC configure Time",
+                            2,
+                            &Task_RTC_Configure_Time_Kernel_Ptr
+                          );
+
+    /* Check xTaskCreate status */
+    configASSERT(status == pdPASS);
+
 
     LED_Mode_Off();
 
