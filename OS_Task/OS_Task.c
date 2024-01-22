@@ -21,6 +21,7 @@ extern TaskHandle_t Task_Handle_Received_Command_Kernel_Ptr;
 extern TaskHandle_t Task_RTC_Configure_Hour_Kernel_Ptr;
 extern TaskHandle_t Task_RTC_Configure_Min_Kernel_Ptr;
 extern TaskHandle_t Task_RTC_Configure_Second_Kernel_Ptr;
+extern TaskHandle_t Task_RTC_Configure_Time_Kernel_Ptr;
 
 extern QueueHandle_t Queue_Data;
 extern QueueHandle_t Queue_Print;
@@ -193,11 +194,6 @@ void Task_RTC_Configure_Time(void * Task_Param)
 	    xQueueSendToFront(Queue_Print,
                           &Print_Msg,
                           pdMS_TO_TICKS(500));
-
-//	    switch(Notified_Value)
-//	    {
-//	        case '0':
-//	    }
     }
 }
 
@@ -210,7 +206,11 @@ void Task_RTC_Configure_Hour(void * Task_Param)
 								"====== RTC Configure Hour ====\n" \
 								"==============================\n" \
 								    "Please input hour\n"          \
-									"Press 0xFF to Exit";
+									"Press F to Exit";
+
+	static uint8_t Hour[2] = {0};
+	static uint8_t Count = 0;
+	static uint8_t Hour_Hex_Form = 0;
 
 	for(;;)
 	{
@@ -224,7 +224,14 @@ void Task_RTC_Configure_Hour(void * Task_Param)
 	                      &Print_Msg,
 	                      pdMS_TO_TICKS(500));
 
-	    App_Set_Hour(Notified_Value);
+	    if( Notified_Value != 0xff )
+	    {
+		    Hour[Count] = Convert_Char_To_Dec(Notified_Value);
+		    Count ++;
+		    Count = Count % 2;
+		    Hour_Hex_Form = (Hour[0] << 4) | Hour[1];
+			App_Set_Hour(Hour_Hex_Form);
+	    }
 	}
 }
 
@@ -237,7 +244,7 @@ void Task_RTC_Configure_Min(void * Task_Param)
 								"====== RTC Configure Min =====\n" \
 								"==============================\n" \
 								    "Please input min\n"           \
-									"Press 0xFF to Exit";
+									"Press F to Exit";
 
 	for(;;)
 	{
@@ -251,7 +258,10 @@ void Task_RTC_Configure_Min(void * Task_Param)
 	                      &Print_Msg,
 	                      pdMS_TO_TICKS(500));
 
-	    App_Set_Hour(Notified_Value);
+	    if( Notified_Value != 0xff )
+	    {
+		    App_Set_Hour(Notified_Value);
+	    }
 	}
 
 }
@@ -265,7 +275,7 @@ void Task_RTC_Configure_Second(void * Task_Param)
 								"==== RTC Configure Second ====\n" \
 								"==============================\n" \
 								    "Please input second\n"        \
-									"Press 0xFF to Exit";
+									"Press F to Exit";
 
 	for(;;)
 	{
@@ -279,7 +289,7 @@ void Task_RTC_Configure_Second(void * Task_Param)
 	                      &Print_Msg,
 	                      pdMS_TO_TICKS(500));
 
-	    App_Set_Second(Notified_Value);
+		App_Set_Second(Notified_Value);
 	}
 }
 
@@ -338,15 +348,18 @@ void Task_Handle_Received_Command(void * Task_Param)
 			}
 			else if( Global_State == rtc_menu)
 			{
-		        switch(Notified_Value)
+		        switch(Received_Command)
 		        {
-		            case 0:
+		            case '0':
+		            	xTaskNotify(Task_RTC_Configure_Time_Kernel_Ptr, 0xff, eSetValueWithOverwrite);
+		            	break;
+		            case '1':
+		            	xTaskNotify(Task_RTC_Configure_Time_Kernel_Ptr, 0xff, eSetValueWithOverwrite);
+		            	break;
+		            case '2':
 		            	xTaskNotify(Task_Print_Menu_Kernel_Ptr, 0xff, eSetValueWithOverwrite);
 		            	break;
-		            case 1:
-		            	xTaskNotify(Task_Print_Menu_Kernel_Ptr, 0xff, eSetValueWithOverwrite);
-		            	break;
-		            case 2:
+		            case '3':
 		            	xTaskNotify(Task_Print_Menu_Kernel_Ptr, 0xff, eSetValueWithOverwrite);
 		            	break;
 		        }
@@ -356,19 +369,31 @@ void Task_Handle_Received_Command(void * Task_Param)
 				switch(Received_Command)
 				{
 				    case '0':
-				    	xTaskNotify(Task_RTC_Configure_Hour_Kernel_Ptr, 1, eSetValueWithOverwrite);
+				    	xTaskNotify(Task_RTC_Configure_Hour_Kernel_Ptr, 0xff, eSetValueWithOverwrite);
 				    	break;
 				    case '1':
-				    	xTaskNotify(Task_RTC_Configure_Min_Kernel_Ptr, 1, eSetValueWithOverwrite);
+				    	xTaskNotify(Task_RTC_Configure_Min_Kernel_Ptr, 0xff, eSetValueWithOverwrite);
 				    	break;
 				    case '2':
-				    	xTaskNotify(Task_RTC_Configure_Second_Kernel_Ptr, 1, eSetValueWithOverwrite);
+				    	xTaskNotify(Task_RTC_Configure_Second_Kernel_Ptr, 0xff, eSetValueWithOverwrite);
 				    	break;
 
 				}
 			}
 			else if(Global_State == rtc_menu_configure_hour)
 			{
+				switch(Received_Command)
+				{
+				    case 'f':
+				    	/* Return to main menu */
+//				    	Global_State = main_menu;
+				        xTaskNotify(Task_Print_Menu_Kernel_Ptr, 0xff, eSetValueWithOverwrite);
+				        break;
+				    default:
+				    	/* Set Hour */
+				        xTaskNotify(Task_RTC_Configure_Hour_Kernel_Ptr, Received_Command, eSetValueWithOverwrite);
+				        break;
+				}
 				/* Set Hour */
 				xTaskNotify(Task_RTC_Configure_Hour_Kernel_Ptr, Received_Command, eSetValueWithOverwrite);
 			}
