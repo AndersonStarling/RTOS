@@ -27,6 +27,7 @@ void App_RTC_Print_Time(void)
     Sec_Low_Byte = APP_CONVERT_LOW_BYTE_TO_CHAR(sTime.Seconds);
 
     /* Print time according to hh:mm:ss */
+    App_Print_String("\n");
     App_Print_Character(Hours_High_Byte);
     App_Print_Character(Hours_Low_Byte);
     App_Print_Character(':');

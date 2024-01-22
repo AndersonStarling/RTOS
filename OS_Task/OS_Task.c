@@ -79,7 +79,7 @@ void Task_Print_Menu(void * Task_Param)
 								"==============================\n" \
 								    "0. LED Effect\n"            \
 									"1. RTC configure\n"         \
-									"2. Exit\n";
+									"2. Update time and date\n";
 
 
     for(;;)
@@ -206,7 +206,7 @@ void Task_RTC_Configure_Hour(void * Task_Param)
 								"====== RTC Configure Hour ====\n" \
 								"==============================\n" \
 								    "Please input hour\n"          \
-									"Press F to Exit";
+									"Press F to Exit\n";
 
 	static uint8_t Hour[2] = {0};
 	static uint8_t Count = 0;
@@ -244,7 +244,7 @@ void Task_RTC_Configure_Min(void * Task_Param)
 								"====== RTC Configure Min =====\n" \
 								"==============================\n" \
 								    "Please input min\n"           \
-									"Press F to Exit";
+									"Press F to Exit\n";
 
 	for(;;)
 	{
@@ -275,7 +275,7 @@ void Task_RTC_Configure_Second(void * Task_Param)
 								"==== RTC Configure Second ====\n" \
 								"==============================\n" \
 								    "Please input second\n"        \
-									"Press F to Exit";
+									"Press F to Exit\n";
 
 	for(;;)
 	{
@@ -386,7 +386,7 @@ void Task_Handle_Received_Command(void * Task_Param)
 				{
 				    case 'f':
 				    	/* Return to main menu */
-//				    	Global_State = main_menu;
+				    	Global_State = main_menu;
 				        xTaskNotify(Task_Print_Menu_Kernel_Ptr, 0xff, eSetValueWithOverwrite);
 				        break;
 				    default:
@@ -394,8 +394,6 @@ void Task_Handle_Received_Command(void * Task_Param)
 				        xTaskNotify(Task_RTC_Configure_Hour_Kernel_Ptr, Received_Command, eSetValueWithOverwrite);
 				        break;
 				}
-				/* Set Hour */
-				xTaskNotify(Task_RTC_Configure_Hour_Kernel_Ptr, Received_Command, eSetValueWithOverwrite);
 			}
 			else if(Global_State == rtc_menu_configure_min)
 			{
