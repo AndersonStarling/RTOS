@@ -246,6 +246,10 @@ void Task_RTC_Configure_Min(void * Task_Param)
 								    "Please input min\n"           \
 									"Press F to Exit\n";
 
+	static uint8_t Min[2] = {0};
+	static uint8_t Count = 0;
+	static uint8_t Hour_Hex_Form = 0;
+
 	for(;;)
 	{
 	    /* Wait event */
@@ -260,7 +264,11 @@ void Task_RTC_Configure_Min(void * Task_Param)
 
 	    if( Notified_Value != 0xff )
 	    {
-		    App_Set_Hour(Notified_Value);
+		    Min[Count] = Convert_Char_To_Dec(Notified_Value);
+		    Count ++;
+		    Count = Count % 2;
+		    Hour_Hex_Form = (Min[0] << 4) | Min[1];
+		    App_Set_Hour(Hour_Hex_Form);
 	    }
 	}
 
@@ -277,6 +285,10 @@ void Task_RTC_Configure_Second(void * Task_Param)
 								    "Please input second\n"        \
 									"Press F to Exit\n";
 
+	static uint8_t Second[2] = {0};
+	static uint8_t Count = 0;
+	static uint8_t Hour_Hex_Form = 0;
+
 	for(;;)
 	{
 	    /* Wait event */
@@ -289,7 +301,15 @@ void Task_RTC_Configure_Second(void * Task_Param)
 	                      &Print_Msg,
 	                      pdMS_TO_TICKS(500));
 
-		App_Set_Second(Notified_Value);
+	    if( Notified_Value != 0xff )
+	    {
+	    	Second[Count] = Convert_Char_To_Dec(Notified_Value);
+		    Count ++;
+		    Count = Count % 2;
+		    Hour_Hex_Form = (Second[0] << 4) | Second[1];
+			App_Set_Second(Hour_Hex_Form);
+	    }
+
 	}
 }
 
@@ -404,6 +424,21 @@ void Task_Handle_Received_Command(void * Task_Param)
 			{
 				/* Set Second */
 				xTaskNotify(Task_RTC_Configure_Second_Kernel_Ptr, Received_Command, eSetValueWithOverwrite);
+			}
+			else if(Global_State == rtc_menu_configure_date)
+			{
+				switch(Received_Command)
+				{
+				    case 'f':
+				    	/* Return to main menu */
+				    	Global_State = main_menu;
+				        xTaskNotify(Task_Print_Menu_Kernel_Ptr, 0xff, eSetValueWithOverwrite);
+				        break;
+				    default:
+				    	/* Set Hour */
+				        xTaskNotify(Task_RTC_Configure_Hour_Kernel_Ptr, Received_Command, eSetValueWithOverwrite);
+				        break;
+				}
 			}
 		}
 	}
