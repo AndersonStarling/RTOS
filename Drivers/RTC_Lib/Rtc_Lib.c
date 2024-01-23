@@ -120,7 +120,7 @@ void App_Set_Second(uint8_t Second)
 
 
 /* Set the date */
-void App_Set_Date(uint8_t Date)
+void App_Set_Day(uint8_t Date)
 {
     RTC_DateTypeDef sDate_local;
 
@@ -131,6 +131,31 @@ void App_Set_Date(uint8_t Date)
     /* Set new time */
     HAL_RTC_SetDate(&hrtc, &sDate_local, RTC_FORMAT_BCD);
 }
+
+void App_Set_Month(uint8_t Month)
+{
+    RTC_DateTypeDef sDate_local;
+
+    /* Use as default value */
+    HAL_RTC_GetDate(&hrtc, &sDate_local, RTC_FORMAT_BCD);
+    sDate_local.Month = Month;
+
+    /* Set new time */
+    HAL_RTC_SetDate(&hrtc, &sDate_local, RTC_FORMAT_BCD);
+}
+
+void App_Set_Year(uint8_t Year)
+{
+    RTC_DateTypeDef sDate_local;
+
+    /* Use as default value */
+    HAL_RTC_GetDate(&hrtc, &sDate_local, RTC_FORMAT_BCD);
+    sDate_local.Year = Year;
+
+    /* Set new time */
+    HAL_RTC_SetDate(&hrtc, &sDate_local, RTC_FORMAT_BCD);
+}
+
 
 
 

@@ -62,6 +62,10 @@ TaskHandle_t Task_RTC_Configure_Hour_Kernel_Ptr;
 TaskHandle_t Task_RTC_Configure_Min_Kernel_Ptr;
 TaskHandle_t Task_RTC_Configure_Second_Kernel_Ptr;
 TaskHandle_t Task_RTC_Configure_Time_Kernel_Ptr;
+TaskHandle_t Task_RTC_Configure_Date_Kernel_Ptr;
+TaskHandle_t Task_RTC_Configure_Day_Kernel_Ptr;
+TaskHandle_t Task_RTC_Configure_Month_Kernel_Ptr;
+TaskHandle_t Task_RTC_Configure_Year_Kernel_Ptr;
 
 QueueHandle_t Queue_Data;
 QueueHandle_t Queue_Print;
@@ -222,7 +226,7 @@ int main(void)
 
     /* Create task 9 */
     status = xTaskCreate(   Task_RTC_Configure_Time,
-                            "Task_8",
+                            "Task_9",
                             400,
                             "Task RTC configure Time",
                             2,
@@ -232,6 +236,62 @@ int main(void)
     /* Check xTaskCreate status */
     configASSERT(status == pdPASS);
 
+    /* Create task 10 */
+    status = xTaskCreate(   Task_RTC_Configure_Date,
+                            "Task_10",
+                            400,
+                            "Task RTC configure Date",
+                            2,
+                            &Task_RTC_Configure_Date_Kernel_Ptr
+                          );
+
+    /* Check xTaskCreate status */
+    configASSERT(status == pdPASS);
+
+    /* Create task 11 */
+    status = xTaskCreate(   Task_RTC_Configure_Day,
+                            "Task_11",
+                            400,
+                            "Task RTC configure Day",
+                            2,
+                            &Task_RTC_Configure_Day_Kernel_Ptr
+                          );
+
+    /* Check xTaskCreate status */
+    configASSERT(status == pdPASS);
+
+    /* Create task 12 */
+    status = xTaskCreate(   Task_RTC_Configure_Month,
+                            "Task_12",
+                            400,
+                            "Task RTC configure Month",
+                            2,
+                            &Task_RTC_Configure_Month_Kernel_Ptr
+                          );
+
+    /* Create task 13 */
+    status = xTaskCreate(   Task_RTC_Configure_Year,
+                            "Task_13",
+                            400,
+                            "Task RTC configure Year",
+                            2,
+                            &Task_RTC_Configure_Year_Kernel_Ptr
+                          );
+
+    /* Check xTaskCreate status */
+    configASSERT(status == pdPASS);
+
+    /* Create task 14 */
+    status = xTaskCreate(   Task_RTC_Configure_Date,
+                            "Task_14",
+                            400,
+                            "Task RTC configure Date",
+                            2,
+                            &Task_RTC_Configure_Date_Kernel_Ptr
+                          );
+
+    /* Check xTaskCreate status */
+    configASSERT(status == pdPASS);
 
     LED_Mode_Off();
 

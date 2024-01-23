@@ -22,6 +22,10 @@ extern TaskHandle_t Task_RTC_Configure_Hour_Kernel_Ptr;
 extern TaskHandle_t Task_RTC_Configure_Min_Kernel_Ptr;
 extern TaskHandle_t Task_RTC_Configure_Second_Kernel_Ptr;
 extern TaskHandle_t Task_RTC_Configure_Time_Kernel_Ptr;
+extern TaskHandle_t Task_RTC_Configure_Date_Kernel_Ptr;
+extern TaskHandle_t Task_RTC_Configure_Day_Kernel_Ptr;
+extern TaskHandle_t Task_RTC_Configure_Month_Kernel_Ptr;
+extern TaskHandle_t Task_RTC_Configure_Year_Kernel_Ptr;
 
 extern QueueHandle_t Queue_Data;
 extern QueueHandle_t Queue_Print;
@@ -313,6 +317,148 @@ void Task_RTC_Configure_Second(void * Task_Param)
 	}
 }
 
+void Task_RTC_Configure_Date(void * Task_Param)
+{
+	const uint8_t * Print_Msg = "\n"                               \
+	                            "==============================\n" \
+								"====== RTC Configure Time ====\n" \
+								"==============================\n" \
+								    "0. Configure day\n"           \
+									"1. Configure month\n"         \
+									"2. Configure year\n"          \
+	                                "3. Exit\n";
+
+	uint32_t Notified_Value = 0;
+
+    for(;;)
+    {
+        /* Wait event */
+        while(pdTRUE != xTaskNotifyWait(0, 0, &Notified_Value, pdMS_TO_TICKS(500))){};
+
+        Global_State = rtc_menu_configure_date;
+
+		/* Send message pointer to queue */
+	    xQueueSendToFront(Queue_Print,
+                          &Print_Msg,
+                          pdMS_TO_TICKS(500));
+    }
+}
+
+void Task_RTC_Configure_Day(void * Task_Param)
+{
+	uint32_t Notified_Value = 0;
+
+	const uint8_t * Print_Msg = "\n"                               \
+	                            "==============================\n" \
+								"====== RTC Configure Hour ====\n" \
+								"==============================\n" \
+								    "Please input hour\n"          \
+									"Press F to Exit\n";
+
+	static uint8_t Day[2] = {0};
+	static uint8_t Count = 0;
+	static uint8_t Hex_Form = 0;
+
+	for(;;)
+	{
+	    /* Wait event */
+	    while(pdTRUE != xTaskNotifyWait(0, 0, &Notified_Value, pdMS_TO_TICKS(500))){};
+
+	    Global_State = rtc_menu_configure_day;
+
+		/* Send message pointer to queue */
+	    xQueueSendToFront(Queue_Print,
+	                      &Print_Msg,
+	                      pdMS_TO_TICKS(500));
+
+	    if( Notified_Value != 0xff )
+	    {
+		    Day[Count] = Convert_Char_To_Dec(Notified_Value);
+		    Count ++;
+		    Count = Count % 2;
+		    Hex_Form = (Day[0] << 4) | Day[1];
+			App_Set_Hour(Hex_Form);
+	    }
+	}
+}
+
+void Task_RTC_Configure_Month(void * Task_Param)
+{
+	uint32_t Notified_Value = 0;
+
+	const uint8_t * Print_Msg = "\n"                               \
+	                            "==============================\n" \
+								"====== RTC Configure Hour ====\n" \
+								"==============================\n" \
+								    "Please input hour\n"          \
+									"Press F to Exit\n";
+
+	static uint8_t Month[2] = {0};
+	static uint8_t Count = 0;
+	static uint8_t Hex_Form = 0;
+
+	for(;;)
+	{
+	    /* Wait event */
+	    while(pdTRUE != xTaskNotifyWait(0, 0, &Notified_Value, pdMS_TO_TICKS(500))){};
+
+	    Global_State = rtc_menu_configure_month;
+
+		/* Send message pointer to queue */
+	    xQueueSendToFront(Queue_Print,
+	                      &Print_Msg,
+	                      pdMS_TO_TICKS(500));
+
+	    if( Notified_Value != 0xff )
+	    {
+	    	Month[Count] = Convert_Char_To_Dec(Notified_Value);
+		    Count ++;
+		    Count = Count % 2;
+		    Hex_Form = (Month[0] << 4) | Month[1];
+			App_Set_Hour(Hex_Form);
+	    }
+	}
+}
+
+void Task_RTC_Configure_Year(void * Task_Param)
+{
+	uint32_t Notified_Value = 0;
+
+	const uint8_t * Print_Msg = "\n"                               \
+	                            "==============================\n" \
+								"====== RTC Configure Hour ====\n" \
+								"==============================\n" \
+								    "Please input hour\n"          \
+									"Press F to Exit\n";
+
+	static uint8_t Year[2] = {0};
+	static uint8_t Count = 0;
+	static uint8_t Hex_Form = 0;
+
+	for(;;)
+	{
+	    /* Wait event */
+	    while(pdTRUE != xTaskNotifyWait(0, 0, &Notified_Value, pdMS_TO_TICKS(500))){};
+
+	    Global_State = rtc_menu_configure_year;
+
+		/* Send message pointer to queue */
+	    xQueueSendToFront(Queue_Print,
+	                      &Print_Msg,
+	                      pdMS_TO_TICKS(500));
+
+	    if( Notified_Value != 0xff )
+	    {
+	    	Year[Count] = Convert_Char_To_Dec(Notified_Value);
+		    Count ++;
+		    Count = Count % 2;
+		    Hex_Form = (Year[0] << 4) | Year[1];
+			App_Set_Hour(Hex_Form);
+	    }
+	}
+}
+
+
 void Task_Handle_Received_Command(void * Task_Param)
 {
 	UBaseType_t Num_Element_In_Queue = 0;
@@ -397,7 +543,6 @@ void Task_Handle_Received_Command(void * Task_Param)
 				    case '2':
 				    	xTaskNotify(Task_RTC_Configure_Second_Kernel_Ptr, 0xff, eSetValueWithOverwrite);
 				    	break;
-
 				}
 			}
 			else if(Global_State == rtc_menu_configure_hour)
@@ -417,26 +562,91 @@ void Task_Handle_Received_Command(void * Task_Param)
 			}
 			else if(Global_State == rtc_menu_configure_min)
 			{
-				/* Set Min */
-				xTaskNotify(Task_RTC_Configure_Min_Kernel_Ptr, Received_Command, eSetValueWithOverwrite);
+				switch(Received_Command)
+				{
+				    case 'f':
+				        /* Return to main menu */
+				        Global_State = main_menu;
+				        xTaskNotify(Task_Print_Menu_Kernel_Ptr, 0xff, eSetValueWithOverwrite);
+				        break;
+			        default:
+					    /* Set Min */
+					    xTaskNotify(Task_RTC_Configure_Min_Kernel_Ptr, Received_Command, eSetValueWithOverwrite);
+				        break;
+				}
 			}
 			else if(Global_State == rtc_menu_configure_second)
 			{
-				/* Set Second */
-				xTaskNotify(Task_RTC_Configure_Second_Kernel_Ptr, Received_Command, eSetValueWithOverwrite);
+				switch(Received_Command)
+				{
+				    case 'f':
+				        /* Return to main menu */
+				        Global_State = main_menu;
+				        xTaskNotify(Task_Print_Menu_Kernel_Ptr, 0xff, eSetValueWithOverwrite);
+				        break;
+			        default:
+					    /* Set Second */
+					    xTaskNotify(Task_RTC_Configure_Second_Kernel_Ptr, Received_Command, eSetValueWithOverwrite);
+				        break;
+				}
 			}
 			else if(Global_State == rtc_menu_configure_date)
 			{
 				switch(Received_Command)
 				{
+				    case '0':
+				    	xTaskNotify(Task_RTC_Configure_Day_Kernel_Ptr, 0xff, eSetValueWithOverwrite);
+				    	break;
+				    case '1':
+				    	xTaskNotify(Task_RTC_Configure_Month_Kernel_Ptr, 0xff, eSetValueWithOverwrite);
+				    	break;
+				    case '2':
+				    	xTaskNotify(Task_RTC_Configure_Year_Kernel_Ptr, 0xff, eSetValueWithOverwrite);
+				    	break;
+				}
+			}
+			else if(Global_State == rtc_menu_configure_day)
+			{
+				switch(Received_Command)
+				{
 				    case 'f':
-				    	/* Return to main menu */
-				    	Global_State = main_menu;
+				        /* Return to main menu */
+				        Global_State = main_menu;
 				        xTaskNotify(Task_Print_Menu_Kernel_Ptr, 0xff, eSetValueWithOverwrite);
 				        break;
-				    default:
-				    	/* Set Hour */
-				        xTaskNotify(Task_RTC_Configure_Hour_Kernel_Ptr, Received_Command, eSetValueWithOverwrite);
+			        default:
+					    /* Set Second */
+					    xTaskNotify(Task_RTC_Configure_Day_Kernel_Ptr, Received_Command, eSetValueWithOverwrite);
+				        break;
+				}
+			}
+			else if(Global_State == rtc_menu_configure_month)
+			{
+				switch(Received_Command)
+				{
+				    case 'f':
+				        /* Return to main menu */
+				        Global_State = main_menu;
+				        xTaskNotify(Task_Print_Menu_Kernel_Ptr, 0xff, eSetValueWithOverwrite);
+				        break;
+			        default:
+					    /* Set Second */
+					    xTaskNotify(Task_RTC_Configure_Month_Kernel_Ptr, Received_Command, eSetValueWithOverwrite);
+				        break;
+				}
+			}
+			else if(Global_State == rtc_menu_configure_year)
+			{
+				switch(Received_Command)
+				{
+				    case 'f':
+				        /* Return to main menu */
+				        Global_State = main_menu;
+				        xTaskNotify(Task_Print_Menu_Kernel_Ptr, 0xff, eSetValueWithOverwrite);
+				        break;
+			        default:
+					    /* Set Second */
+					    xTaskNotify(Task_RTC_Configure_Year_Kernel_Ptr, Received_Command, eSetValueWithOverwrite);
 				        break;
 				}
 			}

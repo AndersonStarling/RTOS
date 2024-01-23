@@ -22,8 +22,13 @@ void App_Set_Min(uint8_t Hour);
 void App_Set_Second(uint8_t Hour);
 
 /* Set Date */
-void App_Set_Date(uint8_t Date);
+void App_Set_Day(uint8_t Date);
 
+/* Set Month */
+void App_Set_Month(uint8_t Date);
+
+/* Set Year */
+void App_Set_Year(uint8_t Date);
 
 #endif /* RTC_LIB_H */
 

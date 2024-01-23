@@ -13,7 +13,10 @@ void Task_RTC_Configure_Hour(void * Task_Param);
 void Task_RTC_Configure_Min(void * Task_Param);
 void Task_RTC_Configure_Second(void * Task_Param);
 void Task_RTC_Configure_Time(void * Task_Param);
-
+void Task_RTC_Configure_Day(void * Task_Param);
+void Task_RTC_Configure_Month(void * Task_Param);
+void Task_RTC_Configure_Year(void * Task_Param);
+void Task_RTC_Configure_Date(void * Task_Param);
 
 #endif /* OS_TASK_H */
 
