@@ -140,9 +140,6 @@ void Task_Led_Effect(void * Task_Param)
             	LED_Mode_Off();
             	LED_Mode_2();
             	break;
-            case 3:
-            	xTaskNotify(Task_Print_Menu_Kernel_Ptr, 0xff, eSetValueWithOverwrite);
-            	break;
         }
 
 	}
@@ -272,10 +269,9 @@ void Task_RTC_Configure_Min(void * Task_Param)
 		    Count ++;
 		    Count = Count % 2;
 		    Hour_Hex_Form = (Min[0] << 4) | Min[1];
-		    App_Set_Hour(Hour_Hex_Form);
+		    App_Set_Min(Hour_Hex_Form);
 	    }
 	}
-
 }
 
 void Task_RTC_Configure_Second(void * Task_Param)
@@ -377,7 +373,7 @@ void Task_RTC_Configure_Day(void * Task_Param)
 		    Count ++;
 		    Count = Count % 2;
 		    Hex_Form = (Day[0] << 4) | Day[1];
-			App_Set_Hour(Hex_Form);
+			App_Set_Day(Hex_Form);
 	    }
 	}
 }
@@ -415,7 +411,7 @@ void Task_RTC_Configure_Month(void * Task_Param)
 		    Count ++;
 		    Count = Count % 2;
 		    Hex_Form = (Month[0] << 4) | Month[1];
-			App_Set_Hour(Hex_Form);
+			App_Set_Month(Hex_Form);
 	    }
 	}
 }
@@ -453,7 +449,7 @@ void Task_RTC_Configure_Year(void * Task_Param)
 		    Count ++;
 		    Count = Count % 2;
 		    Hex_Form = (Year[0] << 4) | Year[1];
-			App_Set_Hour(Hex_Form);
+			App_Set_Year(Hex_Form);
 	    }
 	}
 }
@@ -508,8 +504,9 @@ void Task_Handle_Received_Command(void * Task_Param)
 					    xTaskNotify(Task_Led_Effect_Kernel_Ptr, 2, eSetValueWithOverwrite);
 					    break;
 					case '3':
-					    xTaskNotify(Task_Led_Effect_Kernel_Ptr, 3, eSetValueWithOverwrite);
-					    break;
+						Global_State = main_menu;
+		            	xTaskNotify(Task_Print_Menu_Kernel_Ptr, 0xff, eSetValueWithOverwrite);
+		            	break;
 				}
 			}
 			else if( Global_State == rtc_menu)
@@ -520,7 +517,7 @@ void Task_Handle_Received_Command(void * Task_Param)
 		            	xTaskNotify(Task_RTC_Configure_Time_Kernel_Ptr, 0xff, eSetValueWithOverwrite);
 		            	break;
 		            case '1':
-		            	xTaskNotify(Task_RTC_Configure_Time_Kernel_Ptr, 0xff, eSetValueWithOverwrite);
+		            	xTaskNotify(Task_RTC_Configure_Date_Kernel_Ptr, 0xff, eSetValueWithOverwrite);
 		            	break;
 		            case '2':
 		            	xTaskNotify(Task_Print_Menu_Kernel_Ptr, 0xff, eSetValueWithOverwrite);
@@ -542,6 +539,11 @@ void Task_Handle_Received_Command(void * Task_Param)
 				    	break;
 				    case '2':
 				    	xTaskNotify(Task_RTC_Configure_Second_Kernel_Ptr, 0xff, eSetValueWithOverwrite);
+				    	break;
+				    case '3':
+				        /* Return to main menu */
+				        Global_State = main_menu;
+				        xTaskNotify(Task_Print_Menu_Kernel_Ptr, 0xff, eSetValueWithOverwrite);
 				    	break;
 				}
 			}
@@ -602,6 +604,11 @@ void Task_Handle_Received_Command(void * Task_Param)
 				    	break;
 				    case '2':
 				    	xTaskNotify(Task_RTC_Configure_Year_Kernel_Ptr, 0xff, eSetValueWithOverwrite);
+				    	break;
+				    case '3':
+				        /* Return to main menu */
+				        Global_State = main_menu;
+				        xTaskNotify(Task_Print_Menu_Kernel_Ptr, 0xff, eSetValueWithOverwrite);
 				    	break;
 				}
 			}
