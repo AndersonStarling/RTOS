@@ -22,7 +22,11 @@
 - Project display realtime clock(date and time) and support configure date and time through UART
 - Project run on a OS firmware that base on FreeRTOS enviroment
 - There are two main OS task in project:
+
 + Task 1: Configure time
+Configure date: day, month, year
+Configure time: hour, min, second
+
 + Task 2: Configure LED effect to 3 mode
 Mode 0: Turn on 3 LED
 Mode 1: Turn on 2 LED
