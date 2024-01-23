@@ -30,6 +30,8 @@
 #include "DWT_Counter.h"
 #include "Rtc_Lib.h"
 #include "Led_Mode.h"
+#include "RTOS_State_Machine.h"
+#include "queue.h"
 
 /* USER CODE END Includes */
 
@@ -51,11 +53,30 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-TaskHandle_t Led_1_Handler_Kernel_Pointer;
-TaskHandle_t Led_2_Handler_Kernel_Pointer;
-TaskHandle_t Led_3_Handler_Kernel_Pointer;
-TaskHandle_t Task_Suspend_And_Resume_Kernel_Pointer;
-TaskHandle_t Task_Print_Kernel_Pointer;
+TaskHandle_t Task_Print_Queue_Kernel_Ptr;
+TaskHandle_t Task_Print_Menu_Kernel_Ptr;
+TaskHandle_t Task_Led_Effect_Kernel_Ptr;
+TaskHandle_t Task_RTC_Kernel_Ptr;
+TaskHandle_t Task_Handle_Received_Command_Kernel_Ptr;
+TaskHandle_t Task_RTC_Configure_Hour_Kernel_Ptr;
+TaskHandle_t Task_RTC_Configure_Min_Kernel_Ptr;
+TaskHandle_t Task_RTC_Configure_Second_Kernel_Ptr;
+TaskHandle_t Task_RTC_Configure_Time_Kernel_Ptr;
+TaskHandle_t Task_RTC_Configure_Date_Kernel_Ptr;
+TaskHandle_t Task_RTC_Configure_Day_Kernel_Ptr;
+TaskHandle_t Task_RTC_Configure_Month_Kernel_Ptr;
+TaskHandle_t Task_RTC_Configure_Year_Kernel_Ptr;
+
+QueueHandle_t Queue_Data;
+QueueHandle_t Queue_Print;
+
+uint8_t App_Data = 0;
+
+RTOS_State_Machine_enum_t Global_State = main_menu;
+
+
+
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -108,60 +129,165 @@ int main(void)
     SEGGER_SYSVIEW_Conf();
 
     /* Create task 1 */
-    status = xTaskCreate(   Led_1_Handler,
+    status = xTaskCreate(   Task_Print_Queue,
                             "Task_1",
                             400,
-                            "Led_1 toggle",
+                            "Task Print Queue",
                             2,
-                            &Led_1_Handler_Kernel_Pointer
+                            &Task_Print_Queue_Kernel_Ptr
                           );
 
     /* Check xTaskCreate status */
     configASSERT(status == pdPASS);
 
     /* Create task 2 */
-    status = xTaskCreate(   Led_2_Handler,
+    status = xTaskCreate(   Task_Print_Menu,
                             "Task_2",
                             400,
-                            "Led_2 toggle",
+                            "Task Print Menu",
                             2,
-                            &Led_2_Handler_Kernel_Pointer
+                            &Task_Print_Menu_Kernel_Ptr
                           );
 
     /* Check xTaskCreate status */
     configASSERT(status == pdPASS);
 
     /* Create task 3 */
-    status = xTaskCreate(   Led_3_Handler,
+    status = xTaskCreate(   Task_Led_Effect,
                             "Task_3",
                             400,
-                            "Led_3 toggle",
+                            "Task Led Effect",
                             2,
-                            &Led_3_Handler_Kernel_Pointer
+                            &Task_Led_Effect_Kernel_Ptr
                           );
 
     /* Check xTaskCreate status */
     configASSERT(status == pdPASS);
 
     /* Create task 4 */
-    status = xTaskCreate(   Task_Resume_And_Suspend,
+    status = xTaskCreate(   Task_RTC,
                             "Task_4",
                             400,
-                            "Resume and Suspend Task",
+                            "Task RTC",
                             2,
-                            &Task_Suspend_And_Resume_Kernel_Pointer
+                            &Task_RTC_Kernel_Ptr
                           );
 
     /* Check xTaskCreate status */
     configASSERT(status == pdPASS);
 
     /* Create task 5 */
-    status = xTaskCreate(   Task_Print_Information,
+    status = xTaskCreate(   Task_Handle_Received_Command,
                             "Task_5",
                             400,
-                            "Task Print",
+                            "Task Handle received command",
                             2,
-                            &Task_Print_Kernel_Pointer
+                            &Task_Handle_Received_Command_Kernel_Ptr
+                          );
+
+    /* Check xTaskCreate status */
+    configASSERT(status == pdPASS);
+
+    /* Create task 6 */
+    status = xTaskCreate(   Task_RTC_Configure_Hour,
+                            "Task_6",
+                            400,
+                            "Task RTC configure Hour",
+                            2,
+                            &Task_RTC_Configure_Hour_Kernel_Ptr
+                          );
+
+    /* Check xTaskCreate status */
+    configASSERT(status == pdPASS);
+
+    /* Create task 7 */
+    status = xTaskCreate(   Task_RTC_Configure_Min,
+                            "Task_7",
+                            400,
+                            "Task RTC configure Min",
+                            2,
+                            &Task_RTC_Configure_Min_Kernel_Ptr
+                          );
+
+    /* Check xTaskCreate status */
+    configASSERT(status == pdPASS);
+
+    /* Create task 8 */
+    status = xTaskCreate(   Task_RTC_Configure_Second,
+                            "Task_8",
+                            400,
+                            "Task RTC configure Second",
+                            2,
+                            &Task_RTC_Configure_Second_Kernel_Ptr
+                          );
+
+    /* Check xTaskCreate status */
+    configASSERT(status == pdPASS);
+
+    /* Create task 9 */
+    status = xTaskCreate(   Task_RTC_Configure_Time,
+                            "Task_9",
+                            400,
+                            "Task RTC configure Time",
+                            2,
+                            &Task_RTC_Configure_Time_Kernel_Ptr
+                          );
+
+    /* Check xTaskCreate status */
+    configASSERT(status == pdPASS);
+
+    /* Create task 10 */
+    status = xTaskCreate(   Task_RTC_Configure_Date,
+                            "Task_10",
+                            400,
+                            "Task RTC configure Date",
+                            2,
+                            &Task_RTC_Configure_Date_Kernel_Ptr
+                          );
+
+    /* Check xTaskCreate status */
+    configASSERT(status == pdPASS);
+
+    /* Create task 11 */
+    status = xTaskCreate(   Task_RTC_Configure_Day,
+                            "Task_11",
+                            400,
+                            "Task RTC configure Day",
+                            2,
+                            &Task_RTC_Configure_Day_Kernel_Ptr
+                          );
+
+    /* Check xTaskCreate status */
+    configASSERT(status == pdPASS);
+
+    /* Create task 12 */
+    status = xTaskCreate(   Task_RTC_Configure_Month,
+                            "Task_12",
+                            400,
+                            "Task RTC configure Month",
+                            2,
+                            &Task_RTC_Configure_Month_Kernel_Ptr
+                          );
+
+    /* Create task 13 */
+    status = xTaskCreate(   Task_RTC_Configure_Year,
+                            "Task_13",
+                            400,
+                            "Task RTC configure Year",
+                            2,
+                            &Task_RTC_Configure_Year_Kernel_Ptr
+                          );
+
+    /* Check xTaskCreate status */
+    configASSERT(status == pdPASS);
+
+    /* Create task 14 */
+    status = xTaskCreate(   Task_RTC_Configure_Date,
+                            "Task_14",
+                            400,
+                            "Task RTC configure Date",
+                            2,
+                            &Task_RTC_Configure_Date_Kernel_Ptr
                           );
 
     /* Check xTaskCreate status */
@@ -169,7 +295,16 @@ int main(void)
 
     LED_Mode_Off();
 
-    OS_Task_Init();
+    /* Create queue print */
+    Queue_Data = xQueueCreate (10, sizeof(char));
+	configASSERT(Queue_Data != NULL);
+
+    /* Create queue print */
+    Queue_Print = xQueueCreate (10, sizeof(size_t));
+	configASSERT(Queue_Print != NULL);
+
+    /* Enable UART data byte reception again in IT mode */
+	HAL_UART_Receive_IT(&huart1, (uint8_t*)&App_Data, 1);
 
     vTaskStartScheduler();
 

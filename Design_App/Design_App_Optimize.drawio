@@ -1,0 +1,52 @@
+<mxfile host="app.diagrams.net" modified="2024-01-13T09:20:18.700Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" etag="Scr3A-HnnYOrlGVzjyWd" version="22.1.18" type="device">
+  <diagram name="Trang-1" id="6DXVKZ8c7BkTphm2136q">
+    <mxGraphModel dx="1195" dy="643" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3300" pageHeight="4681" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="Ny-ArWIKuHLY4hGtEuKk-8" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="Ny-ArWIKuHLY4hGtEuKk-1" target="Ny-ArWIKuHLY4hGtEuKk-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Ny-ArWIKuHLY4hGtEuKk-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="Ny-ArWIKuHLY4hGtEuKk-1" target="Ny-ArWIKuHLY4hGtEuKk-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Ny-ArWIKuHLY4hGtEuKk-1" value="Task Menu&lt;br&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1090" y="420" width="170" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Ny-ArWIKuHLY4hGtEuKk-3" value="Task Led Effect&lt;br&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1090" y="820" width="170" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Ny-ArWIKuHLY4hGtEuKk-4" value="Task RTC&lt;br&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1090" y="940" width="170" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Ny-ArWIKuHLY4hGtEuKk-5" value="Task Print Queue&lt;br&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1090" y="690" width="170" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Ny-ArWIKuHLY4hGtEuKk-7" value="Push Menu Infomation to Queue&lt;br&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1350" y="420" width="170" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Ny-ArWIKuHLY4hGtEuKk-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="Ny-ArWIKuHLY4hGtEuKk-9" target="Ny-ArWIKuHLY4hGtEuKk-11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Ny-ArWIKuHLY4hGtEuKk-9" value="Wait from CMD from &lt;b&gt;Task handle command&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1350" y="510" width="170" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Ny-ArWIKuHLY4hGtEuKk-11" value="Notify to Task&amp;nbsp;&lt;br&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1670" y="510" width="170" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Ny-ArWIKuHLY4hGtEuKk-13" value="UART IRQ come&lt;br&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1530" y="570" width="130" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="Ny-ArWIKuHLY4hGtEuKk-14" value="Task handle command" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1090" y="160" width="170" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Ny-ArWIKuHLY4hGtEuKk-15" value="Wait notice from UART interrupt" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1330" y="160" width="170" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Ny-ArWIKuHLY4hGtEuKk-16" value="Handle data from UART&lt;br&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1580" y="160" width="170" height="80" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
